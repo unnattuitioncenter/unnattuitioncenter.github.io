@@ -100,3 +100,39 @@ document.addEventListener('DOMContentLoaded', () => {
         calculateTotal();
     }
 });
+
+// --- GLOBAL FORM HANDLERS ---
+
+// Tuition Center Form
+function sendToWhatsapp(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const msg = document.getElementById('msg').value;
+
+    const whatsappMsg = `*New Tuition Enquiry* 🎓%0A%0AName: ${name}%0APhone: ${phone}%0AMessage: ${msg}`;
+    window.open(`https://wa.me/918307264895?text=${whatsappMsg}`, '_blank');
+}
+
+// Digital Agency Form
+function sendDigitalEnquiry(e) {
+    e.preventDefault();
+    const name = document.getElementById('d-name').value;
+    const biz = document.getElementById('d-biz').value;
+    const msg = document.getElementById('d-msg').value;
+
+    const whatsappMsg = `*New Digital Project Lead* 🚀%0A%0AClient: ${name}%0ABusiness: ${biz}%0ARequirement: ${msg}`;
+    window.open(`https://wa.me/918307264895?text=${whatsappMsg}`, '_blank');
+}
+
+// Quick Inquiry Form (Hero Section)
+function sendQuickEnquiry(e) {
+    e.preventDefault();
+    const name = document.getElementById('q-name').value;
+    const phone = document.getElementById('q-phone').value;
+    const course = document.getElementById('q-course').value || "Not Selected";
+    const msg = document.getElementById('q-msg').value;
+
+    const whatsappMsg = `*Quick Website Inquiry* ⚡%0A%0AName: ${name}%0APhone: ${phone}%0ACourse Interest: ${course}%0AMessage: ${msg}`;
+    window.open(`https://wa.me/918307264895?text=${whatsappMsg}`, '_blank');
+}

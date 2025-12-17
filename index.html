@@ -177,7 +177,33 @@
                 </div>
             </div>
             <div class="hero-image">
-                <img src="students_studying.png" alt="Happy students studying at Unnat Tuition Center" loading="lazy">
+                <!-- Quick Inquiry Form (From User Request) -->
+                <div class="enquiry-card"
+                    style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 400px; margin-left: auto;">
+                    <h3 style="color: #0d47a1; margin-bottom: 20px;">Quick Inquiry</h3>
+                    <form onsubmit="sendQuickEnquiry(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                        <input type="text" id="q-name" placeholder="Your Name" required
+                            style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem;">
+                        <input type="tel" id="q-phone" placeholder="Phone Number" required
+                            style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem;">
+                        <select id="q-course"
+                            style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem; background: white;">
+                            <option value="" disabled selected>Select Class/Course</option>
+                            <option value="Class 1-5">Class 1-5 (All Subjects)</option>
+                            <option value="Class 6-8">Class 6-8 (All Subjects)</option>
+                            <option value="Class 9-10">Class 9-10 (Science/Math)</option>
+                            <option value="Class 11-12">Class 11-12 (Science/Commerce)</option>
+                            <option value="Spoken English">Spoken English</option>
+                            <option value="Competitive Exams">Competitive Exams</option>
+                        </select>
+                        <textarea id="q-msg" placeholder="Message (Optional)" rows="3"
+                            style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem;"></textarea>
+                        <button type="submit"
+                            style="background-color: #e65100; color: white; border: none; padding: 12px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem;">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -483,58 +509,83 @@
                 </details>
             </div>
         </div>
-    </section>
+        <!-- Contact Section -->
+        <section id="contact" class="contact" style="padding: 80px 0; background-color: #f8f9fa;">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Contact Us</h2>
+                    <p>Have questions? Send us a message directly.</p>
+                </div>
+                <div
+                    style="max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                    <form onsubmit="sendToWhatsapp(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                        <input type="text" id="name" placeholder="Your Name" required
+                            style="padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+                        <input type="tel" id="phone" placeholder="Phone Number" required
+                            style="padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+                        <textarea id="msg" placeholder="Your Message (e.g. I want to join Class 10)" rows="4" required
+                            style="padding: 15px; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+                        <button type="submit" class="btn btn-primary"
+                            style="background-color: #25D366; color: white; border: none;">
+                            <i class="fab fa-whatsapp"></i> Send Message on WhatsApp
+                        </button>
+                        <p style="text-align: center; font-size: 0.8rem; color: #888;">This will open WhatsApp with your
+                            message filled.</p>
+                    </form>
+                </div>
+            </div>
+        </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container footer-content">
-            <div class="footer-logo">
-                <h2>Unnat Group</h2>
-                <p>Empowering Education & Technology.</p>
-            </div>
-            <div class="footer-links" style="margin-top: 20px;">
-                <p>Our Ventures:</p>
-                <a href="index.html" style="color: #fff; margin-right: 15px;">Unnat Tuition Center</a>
-                <a href="digital.html" style="color: #cbd5e1;">Unnat Digital</a>
-            </div>
+        <!-- Footer -->
+        <footer>
+            <div class="container footer-content">
+                <div class="footer-logo">
+                    <h2>Unnat Group</h2>
+                    <p>Empowering Education & Technology.</p>
+                </div>
+                <div class="footer-links" style="margin-top: 20px;">
+                    <p>Our Ventures:</p>
+                    <a href="index.html" style="color: #fff; margin-right: 15px;">Unnat Tuition Center</a>
+                    <a href="digital.html" style="color: #cbd5e1;">Unnat Digital</a>
+                </div>
 
-            <div class="social-links" style="margin-top: 25px;">
-                <p style="margin-bottom: 10px; font-size: 0.9rem; color: #cbd5e1;">Connect With Us:</p>
-                <a href="https://www.instagram.com/unnattuitioncenter/" class="social-icon" target="_blank"><i
-                        class="fab fa-instagram"></i></a>
-                <a href="https://www.facebook.com/share/1BJvkDQxJ8" class="social-icon" target="_blank"><i
-                        class="fab fa-facebook-f"></i></a>
-                <a href="https://www.youtube.com/@unnattuitioncenter" class="social-icon" target="_blank"><i
-                        class="fab fa-youtube"></i></a>
-                <a href="https://jsdl.in/DT-99OUVVG3S3W" class="social-icon" target="_blank" title="Justdial"><i
-                        class="fas fa-phone-square-alt"></i></a>
-                <a href="https://www.threads.com/@unnattuitioncentre" class="social-icon" target="_blank"><i
-                        class="fab fa-threads"></i></a>
-            </div>
+                <div class="social-links" style="margin-top: 25px;">
+                    <p style="margin-bottom: 10px; font-size: 0.9rem; color: #cbd5e1;">Connect With Us:</p>
+                    <a href="https://www.instagram.com/unnattuitioncenter/" class="social-icon" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/share/1BJvkDQxJ8" class="social-icon" target="_blank"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.youtube.com/@unnattuitioncenter" class="social-icon" target="_blank"><i
+                            class="fab fa-youtube"></i></a>
+                    <a href="https://jsdl.in/DT-99OUVVG3S3W" class="social-icon" target="_blank" title="Justdial"><i
+                            class="fas fa-phone-square-alt"></i></a>
+                    <a href="https://www.threads.com/@unnattuitioncentre" class="social-icon" target="_blank"><i
+                            class="fab fa-threads"></i></a>
+                </div>
 
-            <div class="footer-legal" style="margin-top: 15px; font-size: 0.8rem;">
-                <a href="terms.html" style="color: #94a3b8; margin-right: 10px;">Terms</a>
-                <a href="privacy.html" style="color: #94a3b8;">Privacy</a>
+                <div class="footer-legal" style="margin-top: 15px; font-size: 0.8rem;">
+                    <a href="terms.html" style="color: #94a3b8; margin-right: 10px;">Terms</a>
+                    <a href="privacy.html" style="color: #94a3b8;">Privacy</a>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Unnat Group. All rights reserved.</p>
+                    <p>Designed for Excellence.</p>
+                </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Unnat Group. All rights reserved.</p>
-                <p>Designed for Excellence.</p>
-            </div>
+        </footer>
+
+        <!-- Sticky Mobile CTA -->
+        <div class="mobile-sticky-bar">
+            <a href="tel:+918307264895" class="sticky-btn call-btn">
+                <span>📞</span> Call Sir
+            </a>
+            <a href="https://wa.me/918307264895?text=Hello%2C%20I%20want%20to%20join%20tuition."
+                class="sticky-btn whatsapp-btn">
+                <span>💬</span> WhatsApp
+            </a>
         </div>
-    </footer>
 
-    <!-- Sticky Mobile CTA -->
-    <div class="mobile-sticky-bar">
-        <a href="tel:+918307264895" class="sticky-btn call-btn">
-            <span>📞</span> Call Sir
-        </a>
-        <a href="https://wa.me/918307264895?text=Hello%2C%20I%20want%20to%20join%20tuition."
-            class="sticky-btn whatsapp-btn">
-            <span>💬</span> WhatsApp
-        </a>
-    </div>
-
-    <script src="script.js"></script>
+        <script src="script.js"></script>
 </body>
 
 </html>

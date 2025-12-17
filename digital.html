@@ -434,6 +434,37 @@
         </div>
     </section>
 
+    <!-- Digital Contact Section -->
+    <section id="contact" style="padding: 100px 0;">
+        <div class="container" style="max-width: 600px; text-align: center;">
+            <div class="section-header">
+                <h2>Start Your Project</h2>
+                <p style="color: var(--text-secondary);">Tell us what you need. We'll reply instantly.</p>
+            </div>
+            <form onsubmit="sendDigitalEnquiry(event)"
+                style="background: var(--glass-bg); padding: 40px; border-radius: 20px; border: 1px solid var(--glass-border); text-align: left;">
+                <div style="margin-bottom: 20px;">
+                    <label style="color: #cbd5e1; display: block; margin-bottom: 8px;">Your Name</label>
+                    <input type="text" id="d-name" required
+                        style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; color: white;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="color: #cbd5e1; display: block; margin-bottom: 8px;">Business Name (Optional)</label>
+                    <input type="text" id="d-biz"
+                        style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; color: white;">
+                </div>
+                <div style="margin-bottom: 30px;">
+                    <label style="color: #cbd5e1; display: block; margin-bottom: 8px;">Project Details</label>
+                    <textarea id="d-msg" rows="4" required
+                        style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; color: white;"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                </button>
+            </form>
+        </div>
+    </section>
+
     <footer>
         <div class="container">
             <h3 class="brand" style="margin-bottom: 10px;">Unnat Group</h3>
