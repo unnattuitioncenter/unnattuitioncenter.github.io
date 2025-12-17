@@ -29,6 +29,11 @@ body {
     overflow-x: hidden;
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 h1,
 h2,
 h3,
@@ -207,7 +212,14 @@ ul {
     font-size: 1.2rem;
     margin-bottom: 30px;
     color: var(--text-light);
+    color: var(--text-light);
     max-width: 500px;
+}
+
+.hero-btns {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 .hero-image {
@@ -619,6 +631,10 @@ footer {
         padding-top: 50px;
     }
 
+    .hero-btns {
+        justify-content: center;
+    }
+
     .hero-text p {
         margin: 0 auto 30px;
     }
@@ -658,6 +674,13 @@ footer {
     .stats-container {
         flex-direction: column;
         gap: 30px;
+        padding: 0 20px;
+    }
+
+    .stats {
+        margin-top: 0;
+        /* Fix overlap issues on mobile */
+        padding: 40px 0;
     }
 }
 
