@@ -1,0 +1,304 @@
+/* Admin Dashboard - Imperial Theme */
+:root {
+    --imperial-gold: #c5a059;
+    --imperial-black: #020617;
+    --imperial-navy: #0f172a;
+    --imperial-panel: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--imperial-black);
+    color: var(--text-primary);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background-color: var(--imperial-navy);
+    border-right: 1px solid rgba(197, 160, 89, 0.2);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--imperial-gold);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-item {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: 0.3s;
+}
+
+.nav-item:hover, .nav-item.active {
+    background-color: rgba(197, 160, 89, 0.1);
+    color: var(--imperial-gold);
+    font-weight: 600;
+}
+
+.logout-btn {
+    margin-top: auto;
+    padding: 15px;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
+    background: radial-gradient(circle at top right, #1e293b 0%, #020617 40%);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.header h1 {
+    font-size: 2rem;
+    color: var(--text-primary);
+}
+
+.status-badge {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--success);
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.card {
+    background: var(--imperial-panel);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--imperial-gold);
+    opacity: 0.5;
+}
+
+.card h3 {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.card .value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+.card .trend {
+    font-size: 0.85rem;
+    color: var(--success);
+}
+
+/* Live Feed */
+.feed-container {
+    background: var(--imperial-panel);
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.log-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.log-item {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.log-item:last-child {
+    border-bottom: none;
+}
+
+.log-type {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 10px;
+    text-transform: uppercase;
+}
+
+.type-SYSTEM { background: rgba(255, 255, 255, 0.1); color: var(--text-primary); }
+.type-COUNCIL { background: rgba(197, 160, 89, 0.1); color: var(--imperial-gold); }
+.type-BLOG { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+.type-CHAT { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
+.type-PREDICT { background: rgba(236, 72, 153, 0.1); color: #f472b6; }
+.type-GAZETTE { background: rgba(34, 197, 94, 0.1); color: #4ade80; }
+
+.log-content {
+    flex: 1;
+}
+
+.log-msg {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.log-data {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-family: monospace;
+}
+
+.log-time {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    min-width: 60px;
+    text-align: right;
+}
+
+/* Login Modal */
+.login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(2, 6, 23, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.login-box {
+    background: var(--imperial-navy);
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--imperial-gold);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 50px rgba(197, 160, 89, 0.2);
+}
+
+.login-input {
+    width: 100%;
+    padding: 15px;
+    background: var(--imperial-black);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    margin: 20px 0;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--imperial-gold);
+    color: var(--imperial-black);
+    border: none;
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 6px;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background: #e3c18d;
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+}
+
+/* Sections */
+.section-view {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.section-view.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

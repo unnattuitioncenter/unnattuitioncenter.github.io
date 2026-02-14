@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNNAT IMPERIAL COMMAND CENTER</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <h2 style="color: #c5a059; margin-bottom: 20px;">COMMAND ACCESS</h2>
+            <p style="color: #94a3b8; font-size: 0.9rem;">Secured System. Unauthorized Access Prohibited.</p>
+            <input type="password" id="adminPass" class="login-input" placeholder="Enter Imperial Security Key">
+            <button class="login-btn" id="loginBtn">Authenticate</button>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-crown"></i> UNNAT ADMIN
+        </div>
+        <div class="nav-item active" data-section="dashboard-view">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+        </div>
+        <div class="nav-item" data-section="logs-view">
+            <i class="fas fa-terminal"></i> Agent Logs
+        </div>
+        <div class="nav-item" data-section="analytics-view">
+            <i class="fas fa-chart-line"></i> Analytics
+        </div>
+        <div class="nav-item" data-section="leads-view">
+            <i class="fas fa-user-graduate"></i> Lead Inquiries
+        </div>
+        <div class="nav-item" data-section="social-view">
+            <i class="fas fa-hashtag"></i> Social Director
+        </div>
+        <div class="nav-item" data-section="settings-view">
+            <i class="fas fa-cogs"></i> System Settings
+        </div>
+        <div class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> LOGOUT
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="section-view active">
+            <div class="header">
+                <h1>Command Dashboard</h1>
+                <div class="status-badge">
+                    <div class="status-dot"></div>
+                    SYSTEM OPERATIONAL
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Total Visits (Session)</h3>
+                    <div class="value" id="stat-visits">0</div>
+                    <div class="trend"><i class="fas fa-arrow-up"></i> Live Tracking</div>
+                </div>
+                <div class="card">
+                    <h3>Blogs Generated</h3>
+                    <div class="value" id="stat-blogs">0</div>
+                    <div class="trend">AI Autonomous Mode</div>
+                </div>
+                <div class="card">
+                    <h3>Student Chats</h3>
+                    <div class="value" id="stat-chats">0</div>
+                    <div class="trend">Resolving Queries</div>
+                </div>
+                <div class="card">
+                    <h3>Result Predictions</h3>
+                    <div class="value" id="stat-predicts">0</div>
+                    <div class="trend">High Engagement</div>
+                </div>
+            </div>
+
+            <!-- Live Feed -->
+            <div class="feed-container">
+                <div class="feed-header">
+                    <h3 style="color: #c5a059;">Real-Time Agent Telemetry</h3>
+                    <div style="font-size: 0.8rem; color: #94a3b8;">
+                        Wait Time: <span style="color: #22c55e;">0ms</span> | Last Active: <span id="lastActiveTime"
+                            style="color: #fff;">--:--</span>
+                    </div>
+                </div>
+                <div class="log-list" id="liveLogList">
+                    <!-- Logs injected here -->
+                    <div style="padding: 20px; text-align: center; color: #64748b;">
+                        Waiting for Agent activity from main site...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs View (Expanded) -->
+        <div id="logs-view" class="section-view">
+            <div class="header">
+                <h1>Agent Logs Archive</h1>
+                <button class="login-btn" style="width: auto; padding: 10px 20px;" onclick="AdminApp.clearLogs()">Clear
+                    Archive</button>
+            </div>
+            <div class="feed-container" style="height: 80vh;">
+                <div class="log-list" id="fullLogList"></div>
+            </div>
+        </div>
+
+        <!-- Analytics View -->
+        <div id="analytics-view" class="section-view">
+            <div class="header">
+                <h1>Imperial Analytics</h1>
+            </div>
+            <div class="dashboard-grid">
+                <div class="card" style="grid-column: span 2;">
+                    <h3>Traffic & Engagement</h3>
+                    <canvas id="trafficChart" height="200"></canvas>
+                </div>
+                <div class="card">
+                    <h3>Lead Sources</h3>
+                    <canvas id="sourceChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leads View -->
+        <div id="leads-view" class="section-view">
+            <div class="header">
+                <h1>Lead Intelligence</h1>
+                <div class="status-badge" id="leadCountBadge">0 NEW LEADS</div>
+            </div>
+            <div class="feed-container">
+                <table style="width: 100%; border-collapse: collapse; color: #cbd5e1;">
+                    <thead>
+                        <tr
+                            style="text-align: left; border-bottom: 1px solid rgba(197, 160, 89, 0.2); color: var(--imperial-gold);">
+                            <th style="padding: 15px;">Date</th>
+                            <th style="padding: 15px;">Name</th>
+                            <th style="padding: 15px;">Type</th>
+                            <th style="padding: 15px;">Phone/Contact</th>
+                            <th style="padding: 15px;">Details</th>
+                            <th style="padding: 15px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTableBody">
+                        <!-- Injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Social Media View -->
+        <div id="social-view" class="section-view">
+            <div class="header">
+                <h1>Social Media Director</h1>
+                <div class="status-badge" style="background:#d946ef;">AI GENERATED</div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Instagram Card -->
+                <div class="card" style="border: 1px solid #c13584;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h3 style="color:#e1306c;"><i class="fab fa-instagram"></i> Instagram Post</h3>
+                        <button onclick="AdminApp.generateSocial('insta')"
+                            style="background:transparent; border:1px solid #fff; color:#fff; padding:5px 10px; border-radius:4px; cursor:pointer;">Regenerate</button>
+                    </div>
+                    <div id="insta-content"
+                        style="background:rgba(0,0,0,0.3); padding:15px; border-radius:8px; font-size:0.85rem; color:#cbd5e1; min-height:150px; white-space: pre-wrap;">
+                        Loading daily viral content...
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="login-btn" onclick="AdminApp.copyToClip('insta-content')"
+                            style="background: #c13584;">Copy Caption</button>
+                        <a id="insta-img-link" href="#" target="_blank" class="login-btn"
+                            style="text-align:center; text-decoration:none; background:#334155;">View Image</a>
+                    </div>
+                </div>
+
+                <!-- YouTube Short Card -->
+                <div class="card" style="border: 1px solid #ff0000;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h3 style="color:#ff0000;"><i class="fab fa-youtube"></i> YouTube Short</h3>
+                        <button onclick="AdminApp.generateSocial('yt')"
+                            style="background:transparent; border:1px solid #fff; color:#fff; padding:5px 10px; border-radius:4px; cursor:pointer;">Regenerate</button>
+                    </div>
+                    <div id="yt-content"
+                        style="background:rgba(0,0,0,0.3); padding:15px; border-radius:8px; font-size:0.85rem; color:#cbd5e1; min-height:150px; white-space: pre-wrap;">
+                        Drafting script...
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="login-btn" onclick="AdminApp.copyToClip('yt-content')"
+                            style="background: #ff0000;">Copy Script</button>
+                        <button class="login-btn" onclick="AdminApp.shareSocial('email')"
+                            style="background: #ea4335; border-color: #ea4335;"><i class="fas fa-envelope"></i> Email to
+                            Me</button>
+                    </div>
+                </div>
+
+                <!-- WhatsApp Status Card -->
+                <div class="card" style="border: 1px solid #25d366;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h3 style="color:#25d366;"><i class="fab fa-whatsapp"></i> WhatsApp Status</h3>
+                        <button onclick="AdminApp.generateSocial('wa')"
+                            style="background:transparent; border:1px solid #fff; color:#fff; padding:5px 10px; border-radius:4px; cursor:pointer;">Regenerate</button>
+                    </div>
+                    <div id="wa-content"
+                        style="background:rgba(0,0,0,0.3); padding:15px; border-radius:8px; font-size:0.85rem; color:#cbd5e1; min-height:150px; white-space: pre-wrap;">
+                        Creating status...
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="login-btn" onclick="AdminApp.copyToClip('wa-content')"
+                            style="background: #25d366;">Copy Text</button>
+                        <button class="login-btn" onclick="AdminApp.shareSocial('wa')"
+                            style="background: #25d366; border-color: #25d366;"><i class="fab fa-whatsapp"></i> Post
+                            Status</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="settings-view" class="section-view">
+            <div class="header">
+                <h1>System Configuration</h1>
+            </div>
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Urgent Enrollment Mode</h3>
+                    <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 20px;">Shows "Only X Seats Left" timer
+                        on main site.</p>
+                    <label class="switch">
+                        <input type="checkbox" id="setting-urgency" onchange="AdminApp.saveSettings()">
+                        <span style="color: var(--success); font-weight: 800;">ACTIVE</span>
+                    </label>
+                </div>
+                <div class="card">
+                    <h3>Holidays / Maintenance</h3>
+                    <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 20px;">Show "Center Closed" banner.</p>
+                    <label class="switch">
+                        <input type="checkbox" id="setting-holiday" onchange="AdminApp.saveSettings()">
+                        <span style="color: var(--danger); font-weight: 800;">INACTIVE</span>
+                    </label>
+                </div>
+                <div class="card">
+                    <h3>Auto-Post Webhook</h3>
+                    <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 20px;">Connect Make.com / Zapier for
+                        free automation.</p>
+                    <input type="text" id="setting-webhook" placeholder="Paste Webhook URL here..."
+                        style="width:100%; padding:10px; background:#0f172a; border:1px solid #334155; color:white; border-radius:4px; margin-bottom:10px;">
+                    <button class="login-btn" onclick="AdminApp.saveSettings()">Save Connection</button>
+                </div>
+                <div class="card">
+                    <h3>Dev Tools</h3>
+                    <button class="login-btn" onclick="localStorage.clear(); location.reload();"
+                        style="background: #ef4444; color: white; margin-top: 10px;">RESET ALL DATA</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="admin.js"></script>
+    <script>
+        // Inline script to init admin app
+        document.addEventListener('DOMContentLoaded', () => {
+            AdminApp.init();
+        });
+    </script>
+</body>
+
+</html>

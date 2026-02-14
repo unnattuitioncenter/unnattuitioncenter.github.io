@@ -103,12 +103,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- GLOBAL FORM HANDLERS ---
 
+// Helper to save lead to Admin Dashboard
+function saveLead(type, data) {
+    try {
+        const lead = {
+            id: Date.now().toString(36),
+            timestamp: new Date().toISOString(),
+            type: type,
+            data: data,
+            status: 'NEW'
+        };
+
+        let leads = JSON.parse(localStorage.getItem('unnat_leads') || '[]');
+        leads.unshift(lead);
+        localStorage.setItem('unnat_leads', JSON.stringify(leads));
+    } catch (e) { console.error('Lead Capture Error', e); }
+}
+
 // Tuition Center Form
 function sendToWhatsapp(e) {
     e.preventDefault();
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const msg = document.getElementById('msg').value;
+
+    saveLead('TUITION', { name, phone, msg });
 
     const whatsappMsg = `*New Tuition Enquiry* 🎓%0A%0AName: ${name}%0APhone: ${phone}%0AMessage: ${msg}`;
     window.open(`https://wa.me/918307264895?text=${whatsappMsg}`, '_blank');
@@ -121,6 +140,8 @@ function sendDigitalEnquiry(e) {
     const biz = document.getElementById('d-biz').value;
     const msg = document.getElementById('d-msg').value;
 
+    saveLead('DIGITAL', { name, biz, msg });
+
     const whatsappMsg = `*New Digital Project Lead* 🚀%0A%0AClient: ${name}%0ABusiness: ${biz}%0ARequirement: ${msg}`;
     window.open(`https://wa.me/918307264895?text=${whatsappMsg}`, '_blank');
 }
@@ -132,6 +153,8 @@ function sendQuickEnquiry(e) {
     const phone = document.getElementById('q-phone').value;
     const course = document.getElementById('q-course').value || "Not Selected";
     const msg = document.getElementById('q-msg').value;
+
+    saveLead('QUICK', { name, phone, course, msg });
 
     const whatsappMsg = `*Quick Website Inquiry* ⚡%0A%0AName: ${name}%0APhone: ${phone}%0ACourse Interest: ${course}%0AMessage: ${msg}`;
     window.open(`https://wa.me/918307264895?text=${whatsappMsg}`, '_blank');
