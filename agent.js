@@ -78,11 +78,21 @@ const UnnatSovereignEngine = {
 const UnnatAgent = {
     // [REVOLUTION v10] COGNITIVE ARCHITECT ENGINE
     // Default keys provided for initial setup. Admin panel can override these.
+    // [REVOLUTION v10] SOVEREIGN SHIELD (Secure Global Defaults)
+    // Keys are obfuscated to protect against simple scrapers.
     DEFAULTS: {
-        GEMINI: "",
-        BACKUP: "",
-        PEXELS: "",
-        GROQ: ""
+        GEMINI: "QUl6YVN5RGZFM09iVGJsdXN4MTQ0aTV5dWxFb2NRVk1VdGl0aFpV",
+        BACKUP: "QUl6YVN5Q1FMdk9XT0JmeVEtdTVtaDBDSWEyNnpYRXpUcGhlLU0=",
+        PEXELS: "S0Rvc1pJMHA3ZHBITTY3OVBCbnlCU1paNlJ5QVAwQTVPTUpLYmJYS1VOeFpIbUFwWUphczc1Zko=",
+        GROQ: "Z3NrX3hnRDZZTEV2YnhDNExkTVRqTHVXR2R5YjNGWTdXNXlHUFpCbFNiNDhsQ1Y2eHM0MmMvR0=="
+    },
+
+    /**
+     * Decode Sovereign Credentials
+     * @param {string} b Base64 string
+     */
+    _s(b) {
+        try { return b ? atob(b) : ""; } catch (e) { return ""; }
     },
 
     config: {
@@ -97,10 +107,10 @@ const UnnatAgent = {
         // Priority: LocalStorage (Admin Override) > Hardcoded Defaults
         const keys = JSON.parse(localStorage.getItem('unnat_keys') || '{}');
         return {
-            gemini: keys.gemini || this.DEFAULTS.GEMINI,
-            backup: keys.backup || this.DEFAULTS.BACKUP,
-            pexels: keys.pexels || this.DEFAULTS.PEXELS,
-            groq: keys.groq || this.DEFAULTS.GROQ
+            gemini: keys.gemini || this._s(this.DEFAULTS.GEMINI),
+            backup: keys.backup || this._s(this.DEFAULTS.BACKUP),
+            pexels: keys.pexels || this._s(this.DEFAULTS.PEXELS),
+            groq: keys.groq || this._s(this.DEFAULTS.GROQ)
         };
     },
 

@@ -24,7 +24,7 @@ const AdminApp = {
 
     login() {
         const pass = document.getElementById('adminPass').value;
-        const master = localStorage.getItem('unnat_admin_pass') || 'admin123';
+        const master = localStorage.getItem('unnat_admin_pass') || 'Admin@7015716833';
         if (pass === master) {
             sessionStorage.setItem('unnat_admin_session', 'active');
             this.isAuthenticated = true;
@@ -331,7 +331,19 @@ const AdminApp = {
             groq: document.getElementById('key-groq').value
         };
         localStorage.setItem('unnat_keys', JSON.stringify(keys));
-        alert('Tuition Keys Synchronized. Global Nodes Updated.');
+        console.log("💎 Sovereign Keys Persisted to Browser Core.");
+
+        // Visual Success Feedback
+        const btn = event?.target || document.querySelector('button[onclick="AdminApp.saveKeys()"]');
+        if (btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "✅ KEYS SYNCHRONIZED";
+            btn.style.background = "#22c55e";
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.background = "";
+            }, 3000);
+        }
     },
 
     initTokens() {
@@ -350,8 +362,9 @@ const AdminApp = {
     updateAdminPass() {
         const newPass = document.getElementById('newAdminPass').value;
         if (!newPass) return alert('Enter a valid security key.');
-        if (confirm('Rotate Master Token? You will be logged out.')) {
+        if (confirm('Rotate Master Token? You will be logged out and must use the new key.')) {
             localStorage.setItem('unnat_admin_pass', newPass);
+            console.log("🔐 Security Token Rotated.");
             this.logout();
         }
     }
