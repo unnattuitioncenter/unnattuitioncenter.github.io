@@ -12,7 +12,25 @@
     --light-bg: #f8f9fa;
     --transition: all 0.3s ease;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+    --hover-shadow: 0 20px 40px rgba(13, 71, 161, 0.15);
+    --brand-gold: #fbbf24;
+}
+
+.marble-text {
+    background: linear-gradient(to right, #fff 20%, #fbbf24 40%, #fbbf24 60%, #fff 80%);
+    background-size: 200% auto;
+    color: #fff;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
 }
 
 * {

@@ -1,170 +1,31 @@
 /**
- * Unnat Imperial Council Engine 9.0
- * Version: 9.0.0
- * Primary Directive: State-Level Academic Authority & Institutional Sovereignty
+ * Unnat Tuition Intelligence v10
+ * Version: 10.2.0
+ * Primary Directive: Global Academic Strategy & AI Sovereignty
  */
 
-const CouncilAgent = {
-    // [UNNAT 3.2] REGIONAL ACADEMIC ENGINE
-    GEMINI_API_KEY: "AIzaSyDfE0ObTblusx144i5yulEocQVMUtithZU", // Primary key (NEW - Fresh from user)
-    BACKUP_API_KEY: "AIzaSyCQLvOWOBjfyQ-u5mh0CIa26zXEzTphe-M", // Backup key #1
-    PEXELS_API_KEY: "KDosZI0p7dpHM679PBnyBSQZ6RyAP0A5OMJKbbXKUNxZHmApYJas75fJ", // Pexels API for images
+const UnnatSovereignEngine = {
+    async synthesize(type, context, customPrompt = null) {
+        const keys = await UnnatAgent.getKeys();
+        const basePersona = "Senior Brand Sovereign and Lead Architect for the Unnat Tuition Center.";
 
-    config: {
-        brandName: "Unnat Tuition Center",
-        location: "Kurukshetra, Haryana",
-        whatsapp: "918307264895",
-        neighborhoods: ["Thanesar", "Pipli", "Sector 13", "Didar Nagar", "Kalyan Nagar"]
-    },
-
-    init() {
-        this.injectStyles();
-
-        // [SETTINGS] Load Config
-        const settings = JSON.parse(localStorage.getItem('unnat_settings') || '{"urgency":true, "holiday":false}');
-
-        if (settings.holiday) {
-            alert('NOTE: Maintenance Mode is Active. Some features may be disabled.');
-        }
-
-        this.renderUI();
-
-        if (settings.urgency) {
-            this.startUrgencyProtocol();
-        }
-
-        this.startCouncilPulse();
-        this.startTitleRotator();
-
-        // [ADMIN TELEMETRY] Log System Start
-        this._logToAdmin('SYSTEM', 'Unnat AI Core Initiated', { version: '9.0.0' });
-
-        // Initial launch
-        this.CouncilEngine();
-        this.GazetteEngine();
-        this.PexelsEngine(); // Fetch education images
-
-        // Auto-generate first blog post after 5 seconds
-        setTimeout(() => {
-            this.BlogEngine();
-            this.SocialEngine(); // Generate social content in background
-        }, 5000);
-
-        // Automated cycle every 4 hours
-        setInterval(() => {
-            this.CouncilEngine();
-            this.GazetteEngine();
-            this.PexelsEngine(); // Refresh images
-        }, 1000 * 60 * 60 * 4);
-
-        // Auto-generate blog post DAILY for market dominance (365 posts/year)
-        setInterval(() => {
-            this.BlogEngine();
-        }, 1000 * 60 * 60 * 24); // Every 24 hours
-
-        this.setupListeners();
-        console.log("Unnat 10.2 [REAL-TIME ENGINE]: Active.");
-    },
-
-    async CouncilEngine() {
-        if (!this.GEMINI_API_KEY) return;
-
-        // [CACHE CHECK] 12 Hour Expiry
-        const CACHE_KEY = 'unnat_council_cache';
-        const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
-        const now = Date.now();
-        if (cached.timestamp && (now - cached.timestamp < 1000 * 60 * 60 * 12)) {
-            console.log("Unnat Engine: Using Cached Intelligence (Serving from Memory)");
-            this.publishDirectives(cached.data.proposals);
-            this.updateCouncilDashboard(cached.data.citations);
-            this.imperialSEO(cached.data.seo);
-            return;
-        }
-
-        console.log("Unnat Engine: Synthesizing Regional Academic Intelligence...");
-        const prompt = `You are the Lead Digital Architect for Unnat Tuition Center.
-        1. Identify 2 specific Haryana State Educational Mandates or Initiatives to align with.
-        2. Write a 'Professional Update' (100 words) on how Unnat is leading Kurukshetra's academic growth.
-        3. Generate 3 'Academic Merit Recognitions'.
-        4. Focus on 'Best Tuition Center Kurukshetra', 'Kurukshetra Toppers', and 12 high-authority keywords.
-        Response must be VALID JSON strictly: {"proposals": "", "citations": [], "seo":{"title":"", "description":"", "keywords":""}}`;
-
-        const tryWithKey = async (apiKey) => {
-            const modelName = "gemini-2.0-flash";
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ role: "user", parts: [{ text: prompt }] }],
-                    generationConfig: { response_mime_type: "application/json" }
-                })
-            });
-            return response;
+        const strategyMap = {
+            'CENTER': `Strategy: Establish absolute brand dominance. Position Unnat as the "BESTEST" and premier academic institution in ${context.city}.`,
+            'GAZETTE': `Strategy: Regional Career Intelligence. Focus on elite opportunities in ${context.city}.`,
+            'BLOG': `Strategy: Instructional Sovereignty. Generate authoritative deep-dives.`,
+            'SOCIAL': `Strategy: Viral Market Domination. Viral authority in ${context.region}.`
         };
 
-        try {
-            let response = await tryWithKey(this.GEMINI_API_KEY);
-
-            // If primary key fails, try backup
-            if (!response.ok && this.BACKUP_API_KEY) {
-                console.log("Primary key failed, trying backup key...");
-                response = await tryWithKey(this.BACKUP_API_KEY);
-            }
-
-            const data = await response.json();
-            const payload = JSON.parse(data.candidates[0].content.parts[0].text);
-
-            // Save to Cache
-            localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: payload }));
-
-            this.publishDirectives(payload.proposals);
-            this.updateCouncilDashboard(payload.citations);
-            this.imperialSEO(payload.seo);
-
-            // [ADMIN TELEMETRY] Log Council Action
-            this._logToAdmin('COUNCIL', 'Directives Published', {
-                proposals: payload.proposals.substring(0, 50) + '...',
-                seo: payload.seo.title
-            });
-
-        } catch (e) {
-            console.error("Council Engine Failure:", e);
-        }
-    },
-
-    publishDirectives(proposal) {
-        const area = document.getElementById('state-proposals');
-        if (!area) return;
-        area.innerHTML = `
-            <div style="font-family: 'Inter', sans-serif; color: #f1f5f9; background: rgba(197, 160, 89, 0.03); padding: 30px; border: 1px solid rgba(197, 160, 89, 0.2);">
-                <div class="official-badge" style="display: inline-block; margin-bottom: 20px;">CENTRAL UPDATE #10.2</div>
-                <p style="font-size: 1rem; line-height: 1.8; color: #cbd5e1;">${proposal}</p>
-                <div style="margin-top: 25px; border-top: 1px solid rgba(197, 160, 89, 0.1); padding-top: 15px; font-weight: 900; color: var(--imperial-gold); font-size: 0.75rem; text-transform: uppercase;">Verified by Unnat Tuition Center Administrative Desk</div>
-            </div>
+        const prompt = customPrompt || `
+            Role: ${basePersona}
+            Context: ${JSON.stringify(context)}
+            ${strategyMap[type] || ''}
+            Mission: Generate recursive elite output for ${type} node.
+            Formatting: Response must be VALID JSON.
         `;
-    },
 
-    async GazetteEngine() {
-        if (!this.GEMINI_API_KEY) return;
-
-        // [CACHE CHECK] 4 Hour Expiry
-        const CACHE_KEY = 'unnat_gazette_cache';
-        const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
-        const now = Date.now();
-        if (cached.timestamp && (now - cached.timestamp < 1000 * 60 * 60 * 4)) {
-            console.log("Gazette Engine: Using Cached Opportunities");
-            this.updateGazetteUI(cached.data);
-            return;
-        }
-
-        console.log("Gazette Engine: Scraping Regional Opportunities...");
-
-        const prompt = `You are the Regional Career Intelligence for Unnat Tuition Center.
-        1. Identify 5 latest Government or Private job openings for students in Kurukshetra/Haryana.
-        2. Format: [{"title": "", "dept": "", "deadline": ""}]
-        3. Identify 3 latest Admit Card releases.
-        4. Identify 3 latest Results declared.
-        Response must be VALID JSON strictly: {"jobs": [], "admit": [], "results": []}`;
+        // Multi-step reasoning capacity (Internal)
+        console.log(`👑 Sovereign Engine: Executing ${type} synthesis with Reasoning v10...`);
 
         const tryWithKey = async (apiKey) => {
             const modelName = "gemini-2.0-flash";
@@ -179,34 +40,181 @@ const CouncilAgent = {
         };
 
         try {
-            let response = await tryWithKey(this.GEMINI_API_KEY);
+            let res = await tryWithKey(keys.gemini);
+            if (!res.ok) res = await tryWithKey(keys.backup);
 
-            // If primary key fails, try backup
-            if (!response.ok && this.BACKUP_API_KEY) {
-                console.log("Primary key failed, trying backup key...");
-                response = await tryWithKey(this.BACKUP_API_KEY);
-            }
+            const data = await res.json();
+            let raw = data.candidates[0].content.parts[0].text;
+            return JSON.parse(raw.replace(/```json/g, '').replace(/```/g, '').trim());
+        } catch (e) {
+            console.error(`Sovereign Failure [${type}]:`, e);
+            throw e;
+        }
+    }
+};
 
-            const data = await response.json();
-            const payload = JSON.parse(data.candidates[0].content.parts[0].text);
-            // Save to Cache
-            localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: payload }));
+const UnnatAgent = {
+    // [REVOLUTION v10] COGNITIVE ARCHITECT ENGINE
+    // Default keys provided for initial setup. Admin panel can override these.
+    DEFAULTS: {
+        GEMINI: "",
+        BACKUP: "",
+        PEXELS: ""
+    },
 
+    config: {
+        brandName: "Unnat Tuition Center",
+        location: "Kurukshetra, Haryana", // Historical Core
+        whatsapp: "918307264895",
+        neighborhoods: ["Thanesar", "Pipli", "Sector 13", "Didar Nagar", "Kalyan Nagar"],
+        isGlobal: true // Revolutionary Flag
+    },
+
+    async getKeys() {
+        // Priority: LocalStorage (Admin Override) > Hardcoded Defaults
+        const keys = JSON.parse(localStorage.getItem('unnat_keys') || '{}');
+        return {
+            gemini: keys.gemini || this.DEFAULTS.GEMINI,
+            backup: keys.backup || this.DEFAULTS.BACKUP,
+            pexels: keys.pexels || this.DEFAULTS.PEXELS
+        };
+    },
+
+    async getIPContext() {
+        try {
+            const res = await fetch('https://ipapi.co/json/');
+            const data = await res.json();
+            return {
+                city: data.city || "Kurukshetra",
+                region: data.region || "Haryana",
+                country: data.country_name || "India",
+                isLocal: (data.city === "Kurukshetra" || data.region === "Haryana")
+            };
+        } catch (e) {
+            return { city: "Kurukshetra", region: "Haryana", country: "India", isLocal: true };
+        }
+    },
+
+    init() {
+        this.injectStyles();
+
+        // [PWA] Service Worker Sovereignty
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log("Unnat Intelligence: Service Worker Synchronized."))
+                .catch(e => console.warn("SW Link Failed:", e));
+        }
+
+        // [SETTINGS] Load Config
+        const settings = JSON.parse(localStorage.getItem('unnat_settings') || '{"urgency":true, "holiday":false}');
+
+        if (settings.holiday) {
+            alert('NOTE: Maintenance Mode is Active. Some features may be disabled.');
+        }
+
+        this.renderUI();
+
+        if (settings.urgency) {
+            this.startUrgencyProtocol();
+        }
+
+        this.startCenterPulse();
+        this.startTitleRotator();
+
+        // [ADMIN TELEMETRY] Log System Start
+        this._logToAdmin('SYSTEM', 'Unnat Intelligence v10 Online', { version: '10.0.0' });
+
+        // Initial launch
+        this.CenterEngine();
+        this.GazetteEngine();
+        this.PexelsEngine(); // Fetch education images
+
+        // Auto-generate first blog post after 5 seconds
+        setTimeout(() => {
+            this.BlogEngine();
+            this.SocialEngine(); // Generate social content in background
+        }, 5000);
+
+        // Automated cycle every 4 hours
+        setInterval(() => {
+            this.CenterEngine();
+            this.GazetteEngine();
+            this.PexelsEngine(); // Refresh images
+        }, 1000 * 60 * 60 * 4);
+
+        // Auto-generate blog post DAILY for market dominance (365 posts/year)
+        setInterval(() => {
+            this.BlogEngine();
+        }, 1000 * 60 * 60 * 24); // Every 24 hours
+
+        this.setupListeners();
+        console.log("Unnat 10.2 [REAL-TIME ENGINE]: Active.");
+    },
+
+    async CenterEngine() {
+        const context = await this.getIPContext();
+        const CACHE_KEY = 'unnat_center_cache';
+        const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+        const now = Date.now();
+
+        if (cached.timestamp && (now - cached.timestamp < 1000 * 60 * 60 * 12)) {
+            console.log("Unnat Engine: Serving Cached Global Intelligence");
+            this.publishDirectives(cached.data.proposals);
+            this.updateCenterDashboard(cached.data.citations);
+            this.TuitionSEO(cached.data.seo);
+            return;
+        }
+
+        try {
+            const payload = await UnnatSovereignEngine.synthesize('CENTER', context);
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: now, data: payload }));
+            this.publishDirectives(payload.proposals);
+            this.updateCenterDashboard(payload.citations);
+            this.TuitionSEO(payload.seo);
+            this._logToAdmin('CENTER', `Intelligence Synthesized for ${context.city}`);
+        } catch (e) {
+            console.error("Center Engine Failure:", e);
+        }
+    },
+
+    publishDirectives(proposal) {
+        const area = document.getElementById('state-proposals');
+        if (!area) return;
+        area.innerHTML = `
+            <div style="font-family: 'Inter', sans-serif; color: #f1f5f9; background: rgba(197, 160, 89, 0.03); padding: 30px; border: 1px solid rgba(197, 160, 89, 0.2);">
+                <div class="official-badge" style="display: inline-block; margin-bottom: 20px;">CENTRAL UPDATE #10.2</div>
+                <p style="font-size: 1rem; line-height: 1.8; color: #cbd5e1;">${proposal}</p>
+                <div style="margin-top: 25px; border-top: 1px solid rgba(197, 160, 89, 0.1); padding-top: 15px; font-weight: 900; color: var(--brand-gold); font-size: 0.75rem; text-transform: uppercase;">Verified by Unnat Tuition Center Administrative Desk</div>
+            </div>
+        `;
+    },
+
+    async GazetteEngine() {
+        const context = await this.getIPContext();
+        const CACHE_KEY = 'unnat_gazette_cache';
+        const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+        const now = Date.now();
+
+        if (cached.timestamp && (now - cached.timestamp < 1000 * 60 * 60 * 4)) {
+            console.log("Gazette Engine: Serving Cached Global Opportunities");
+            this.updateGazetteUI(cached.data);
+            return;
+        }
+
+        try {
+            const payload = await UnnatSovereignEngine.synthesize('GAZETTE', context);
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: now, data: payload }));
             this.updateGazetteUI(payload);
-
-            // [ADMIN TELEMETRY] Log Gazette Action
-            this._logToAdmin('GAZETTE', 'Jobs & Results Updated', {
-                jobs: payload.jobs.length,
-                results: payload.results.length
-            });
-
+            this._logToAdmin('GAZETTE', `Opportunities Updated for ${context.city}`);
         } catch (e) {
             console.error("Gazette Engine Failure:", e);
         }
     },
 
     async PexelsEngine() {
-        if (!this.PEXELS_API_KEY) return;
+        const keys = await this.getKeys();
+        if (!keys.pexels) return;
+
         console.log("Pexels Engine: Fetching education-themed images...");
 
         const queries = ["students studying", "classroom", "education", "learning", "teacher", "books"];
@@ -214,21 +222,15 @@ const CouncilAgent = {
 
         try {
             const response = await fetch(`https://api.pexels.com/v1/search?query=${randomQuery}&per_page=6&orientation=landscape`, {
-                headers: {
-                    'Authorization': this.PEXELS_API_KEY
-                }
+                headers: { 'Authorization': keys.pexels }
             });
 
             const data = await response.json();
-
             if (data.photos && data.photos.length > 0) {
                 this.updateImagesUI(data.photos);
                 console.log(`✅ Loaded ${data.photos.length} education images from Pexels`);
-
-                // [ADMIN TELEMETRY] Log Pexels Action
                 this._logToAdmin('PEXELS', 'Images Refreshed', { count: data.photos.length, query: randomQuery });
             }
-
         } catch (e) {
             console.error("Pexels Engine Failure:", e);
         }
@@ -251,107 +253,34 @@ const CouncilAgent = {
     },
 
     async BlogEngine() {
-        if (!this.GEMINI_API_KEY || !this.PEXELS_API_KEY) {
-            console.log("⚠️ Blog Engine requires both Gemini and Pexels API keys");
-            return;
-        }
-        console.log("🚀 Blog Engine: Generating SEO-optimized blog post...");
+        const keys = await this.getKeys();
+        if (!keys.pexels) return;
 
-        // Expanded blog topics for daily content (365 posts/year)
-        const topics = [
-            // CBSE & Board Exams (10 topics)
-            { title: "10 Proven Strategies to Score 95+ in CBSE Boards", keywords: "CBSE tips, board exam preparation, study strategies, score 95 percent", category: "Study Tips", query: "students studying" },
-            { title: "CBSE Class 10 Math: Complete Preparation Guide", keywords: "class 10 math, CBSE math, board exam math", category: "CBSE Guide", query: "math student" },
-            { title: "How to Prepare for CBSE English Board Exam", keywords: "CBSE English, board exam English, English preparation", category: "CBSE Guide", query: "english class" },
-            { title: "Science Practical Tips for CBSE Class 12", keywords: "CBSE science practical, class 12 science, lab exam", category: "CBSE Guide", query: "science lab" },
-            { title: "Time Management Secrets for Board Exams", keywords: "time management, board exam tips, study schedule", category: "Study Tips", query: "student planning" },
-
-            // Kurukshetra Local (5 topics)
-            { title: "Best Study Cafes in Kurukshetra for Students", keywords: "Kurukshetra students, study places, cafes, local guide", category: "Local Guide", query: "cafe study" },
-            { title: "Top 10 Schools in Kurukshetra: Parent's Guide", keywords: "best schools Kurukshetra, school admission, education", category: "Local Guide", query: "school building" },
-            { title: "Kurukshetra University Admission Guide 2026", keywords: "KUK admission, Kurukshetra University, college admission", category: "Local Guide", query: "university campus" },
-            { title: "Best Coaching Centers in Kurukshetra", keywords: "coaching Kurukshetra, tuition centers, best coaching", category: "Local Guide", query: "classroom teaching" },
-            { title: "Student Life in Kurukshetra: Complete Guide", keywords: "Kurukshetra student life, college life, student guide", category: "Local Guide", query: "students group" },
-
-            // Competitive Exams (5 topics)
-            { title: "HSSC Exam Preparation: Complete Guide", keywords: "HSSC preparation, competitive exams, Haryana jobs", category: "Competitive Exams", query: "exam preparation" },
-            { title: "JEE Main Preparation Strategy for Haryana Students", keywords: "JEE Main, engineering entrance, JEE preparation", category: "Competitive Exams", query: "engineering student" },
-            { title: "NEET Preparation: Medical Entrance Guide", keywords: "NEET preparation, medical entrance, NEET exam", category: "Competitive Exams", query: "medical student" },
-            { title: "SSC CGL Preparation: Complete Roadmap", keywords: "SSC CGL, government job, SSC preparation", category: "Competitive Exams", query: "government exam" },
-            { title: "Bank PO Exam: Preparation Tips", keywords: "bank PO, banking exam, IBPS preparation", category: "Competitive Exams", query: "banking career" },
-
-            // English Learning (3 topics)
-            { title: "Master Spoken English in 30 Days", keywords: "spoken English, English learning, communication skills", category: "English Learning", query: "teacher classroom" },
-            { title: "Common English Grammar Mistakes Indians Make", keywords: "English grammar, common mistakes, grammar tips", category: "English Learning", query: "english writing" },
-            { title: "IELTS Preparation Guide for Indian Students", keywords: "IELTS preparation, English test, IELTS exam", category: "English Learning", query: "ielts test" },
-
-            // Career Guidance (2 topics)
-            { title: "Career Options After 12th Science", keywords: "career after 12th, science stream, career guidance", category: "Career Guide", query: "career counseling" },
-            { title: "Government Jobs in Haryana 2026", keywords: "Haryana government jobs, sarkari naukri, job opportunities", category: "Career Guide", query: "government office" }
-        ];
-
-        const topic = topics[Math.floor(Math.random() * topics.length)];
+        const context = await this.getIPContext();
+        const keyword = "Academic Excellence";
 
         try {
-            // Generate blog content
-            const contentPrompt = `Write a complete SEO-optimized blog post for "${topic.title}".
-Write 800-1000 words with H2/H3 headings, practical tips, and engaging content.
-Format in clean HTML using <h2>, <h3>, <p>, <ul>, <li> tags.
-Include a strong conclusion with CTA.
-Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150 char", "slug": "url-slug"}`;
-
-            const tryWithKey = async (apiKey) => {
-                return await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ role: "user", parts: [{ text: contentPrompt }] }],
-                        generationConfig: { response_mime_type: "application/json" }
-                    })
-                });
-            };
-
-            let response = await tryWithKey(this.GEMINI_API_KEY);
-            if (!response.ok && this.BACKUP_API_KEY) {
-                response = await tryWithKey(this.BACKUP_API_KEY);
-            }
-
-            const data = await response.json();
-            const blogData = JSON.parse(data.candidates[0].content.parts[0].text);
-
-            // Fetch images
-            const imageResponse = await fetch(`https://api.pexels.com/v1/search?query=${topic.query}&per_page=4&orientation=landscape`, {
-                headers: { 'Authorization': this.PEXELS_API_KEY }
+            const blogData = await UnnatSovereignEngine.synthesize('BLOG', context);
+            const imageQuery = keyword.includes("Academic") ? "student studying" : keyword;
+            const imageResponse = await fetch(`https://api.pexels.com/v1/search?query=${imageQuery}&per_page=1&orientation=landscape`, {
+                headers: { 'Authorization': keys.pexels }
             });
             const imageData = await imageResponse.json();
 
-            // Create complete HTML
-            const blogHTML = this.createBlogHTML(topic, blogData, imageData.photos);
-
-            // Store for download
-            window.generatedBlog = {
-                filename: `${blogData.slug}.html`,
-                content: blogHTML,
-                topic: topic.title
+            const topic = {
+                title: blogData.title || `${keyword} Guide by Unnat`,
+                keywords: blogData.keywords || keyword,
+                category: "Unnat Insights",
+                query: imageQuery
             };
 
-            console.log(`✅ Blog Generated: "${topic.title}"`);
-            console.log(`📄 File: ${blogData.slug}.html`);
-            console.log(`🖼️ Images: ${imageData.photos.length}`);
-
-            // Auto-download the blog post
+            const blogHTML = this.createBlogHTML(topic, blogData, imageData.photos);
+            window.generatedBlog = { filename: `${blogData.slug}.html`, content: blogHTML };
             this.autoDownloadBlog(blogData.slug, blogHTML);
-
             this.showBlogNotification(topic.title, blogData.slug);
-
-            // [ADMIN TELEMETRY] Log Blog Generation
-            this._logToAdmin('BLOG', `Generated: ${topic.title}`, {
-                slug: blogData.slug,
-                category: topic.category
-            });
-
+            this._logToAdmin('BLOG', `Generated: ${topic.title}`);
         } catch (e) {
-            console.error("Blog Engine Error:", e);
+            console.error("Blog Engine Failure:", e);
         }
     },
 
@@ -373,18 +302,18 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
 <body>
     <nav style="background: #000; padding: 20px 0; border-bottom: 1px solid rgba(197, 160, 89, 0.2);">
         <div class="container" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-            <a href="index.html" style="color: var(--imperial-gold); font-size: 1.5rem; font-weight: 900; text-decoration: none;">UNNAT</a>
+            <a href="index.html" style="color: var(--brand-gold); font-size: 1.5rem; font-weight: 900; text-decoration: none;">UNNAT</a>
             <div style="display: flex; gap: 30px;">
                 <a href="index.html" style="color: #94a3b8; text-decoration: none;">Home</a>
                 <a href="resources.html" style="color: #94a3b8; text-decoration: none;">Blog</a>
-                <a href="https://wa.me/918307264895" style="color: var(--imperial-gold); text-decoration: none;">Contact</a>
+                <a href="https://wa.me/918307264895" style="color: var(--brand-gold); text-decoration: none;">Contact</a>
             </div>
         </div>
     </nav>
 
     <article style="max-width: 900px; margin: 60px auto; padding: 0 20px;">
         <header style="margin-bottom: 40px;">
-            <div style="color: var(--imperial-gold); font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 15px;">${topic.category.toUpperCase()}</div>
+            <div style="color: var(--brand-gold); font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 15px;">${topic.category.toUpperCase()}</div>
             <h1 style="font-size: 3rem; color: #fff; margin-bottom: 20px; line-height: 1.2;">${topic.title}</h1>
             <div style="color: #64748b; font-size: 0.9rem;">Published ${date} | Unnat Tuition Center</div>
         </header>
@@ -395,15 +324,15 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
             ${blogData.content}
         </div>
 
-        <div style="background: linear-gradient(135deg, rgba(197, 160, 89, 0.1), rgba(197, 160, 89, 0.05)); border: 2px solid var(--imperial-gold); border-radius: 8px; padding: 40px; text-align: center; margin: 60px 0;">
-            <h3 style="color: var(--imperial-gold); font-size: 2rem; margin-bottom: 20px;">Ready to Excel?</h3>
+        <div style="background: linear-gradient(135deg, rgba(197, 160, 89, 0.1), rgba(197, 160, 89, 0.05)); border: 2px solid var(--brand-gold); border-radius: 8px; padding: 40px; text-align: center; margin: 60px 0;">
+            <h3 style="color: var(--brand-gold); font-size: 2rem; margin-bottom: 20px;">Ready to Excel?</h3>
             <p style="color: #cbd5e1; font-size: 1.1rem; margin-bottom: 30px;">Join Unnat Tuition Center</p>
-            <a href="https://wa.me/918307264895" class="btn-imperial" style="display: inline-block; padding: 18px 40px; background: var(--imperial-gold); color: #000; text-decoration: none; font-weight: 900; border-radius: 4px;">📚 Book FREE Demo</a>
+            <a href="https://wa.me/918307264895" class="btn-Tuition" style="display: inline-block; padding: 18px 40px; background: var(--brand-gold); color: #000; text-decoration: none; font-weight: 900; border-radius: 4px;">📚 Book FREE Demo</a>
         </div>
     </article>
 
     <footer style="background: #000; border-top: 1px solid rgba(197, 160, 89, 0.1); padding: 40px 0; text-align: center;">
-        <p style="color: var(--imperial-gold); font-size: 1.5rem; margin-bottom: 10px;">UNNAT</p>
+        <p style="color: var(--brand-gold); font-size: 1.5rem; margin-bottom: 10px;">UNNAT</p>
         <p style="opacity: 0.3; font-size: 0.7rem;">© 2026 UNNAT. ALL RIGHTS RESERVED.</p>
     </footer>
 </body>
@@ -416,7 +345,7 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
         notif.innerHTML = `
             <div style="font-size: 1.2rem; margin-bottom: 10px;">✅ Blog Generated!</div>
             <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 15px;">${title}</div>
-            <button onclick="window.downloadBlog()" style="background: #000; color: var(--imperial-gold); border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 900; width: 100%;">💾 Download ${slug}.html</button>
+            <button onclick="window.downloadBlog()" style="background: #000; color: var(--brand-gold); border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 900; width: 100%;">💾 Download ${slug}.html</button>
         `;
         document.body.appendChild(notif);
         setTimeout(() => notif.remove(), 30000);
@@ -452,10 +381,10 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
                         <div style="font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 5px;">${item.title.toUpperCase()}</div>
                         <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8;">
                             <span>🏢 ${item.dept}</span>
-                            <span style="color: var(--imperial-gold); font-weight: 700;">📅 ${item.deadline}</span>
+                            <span style="color: var(--brand-gold); font-weight: 700;">📅 ${item.deadline}</span>
                         </div>
                         <a href="https://wa.me/${this.config.whatsapp}?text=Requesting%20Details%20for:%20${encodeURIComponent(item.title)}" 
-                           style="display: inline-block; margin-top: 10px; font-size: 0.7rem; color: var(--imperial-gold); text-decoration: none; font-weight: 900; letter-spacing: 1px;">
+                           style="display: inline-block; margin-top: 10px; font-size: 0.7rem; color: var(--brand-gold); text-decoration: none; font-weight: 900; letter-spacing: 1px;">
                            APPLY VIA UNNAT DESK <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
@@ -492,7 +421,7 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
         }
     },
 
-    updateCouncilDashboard(citations) {
+    updateCenterDashboard(citations) {
         // Merit Bar Animation
         const bar = document.getElementById('merit-bar');
         const pct = document.getElementById('merit-percent');
@@ -524,8 +453,8 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
             grid.innerHTML = '';
             trends.forEach(t => {
                 grid.innerHTML += `
-                    <div class="inst-card" style="border-left: 2px solid var(--imperial-gold);">
-                        <div style="font-size: 0.7rem; color: var(--imperial-gold); font-weight: 900; margin-bottom: 10px;">DIRECTIVE ANALYTICS</div>
+                    <div class="inst-card" style="border-left: 2px solid var(--brand-gold);">
+                        <div style="font-size: 0.7rem; color: var(--brand-gold); font-weight: 900; margin-bottom: 10px;">DIRECTIVE ANALYTICS</div>
                         <h4 style="margin-bottom: 10px; color: #fff;">${t.label}</h4>
                         <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.5;">${t.narrative}</p>
                     </div>
@@ -536,14 +465,14 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
         if (proposalsArea && trends[0]) {
             proposalsArea.innerHTML = `
                 <div style="padding: 15px; border: 1px solid rgba(197, 160, 89, 0.1); background: rgba(0,0,0,0.2);">
-                    <div style="font-weight: 800; color: var(--imperial-gold); margin-bottom: 10px;">WHITE PAPER G-2026</div>
+                    <div style="font-weight: 800; color: var(--brand-gold); margin-bottom: 10px;">WHITE PAPER G-2026</div>
                     <p style="font-size: 0.9rem; line-height: 1.6;">${trends[0].narrative}</p>
                 </div>
             `;
         }
     },
 
-    imperialSEO(seo) {
+    TuitionSEO(seo) {
         // Unnat Identity Morphing
         document.title = `${seo.title} | Unnat Tuition Center`;
 
@@ -602,10 +531,10 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
     injectStyles() {
         const css = `
             :root {
-                --imperial-gold: #c5a059;
-                --imperial-navy: #0f172a;
-                --imperial-accent: #1e293b;
-                --unnat-neon: var(--imperial-gold);
+                --brand-gold: #c5a059;
+                --brand-navy: #0f172a;
+                --brand-accent: #1e293b;
+                --unnat-neon: var(--brand-gold);
                 --glass-bg: rgba(15, 23, 42, 0.98);
             }
 
@@ -621,8 +550,8 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
             }
 
             .counselor-header {
-                background: linear-gradient(135deg, var(--imperial-navy), #020617);
-                padding: 18px 20px; color: var(--imperial-gold); border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+                background: linear-gradient(135deg, var(--brand-navy), #020617);
+                padding: 18px 20px; color: var(--brand-gold); border-bottom: 1px solid rgba(197, 160, 89, 0.2);
                 display: flex; align-items: center; gap: 12px;
             }
 
@@ -684,14 +613,14 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
 
             /* Loading Anim */
             .typing-indicator {
-                padding: 10px; font-size: 0.8rem; color: var(--imperial-gold); font-style: italic; display: none;
+                padding: 10px; font-size: 0.8rem; color: var(--brand-gold); font-style: italic; display: none;
                 animation: pulse 1.5s infinite;
             }
             @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
             /* Urgency Bar */
             .unnat-urgency-bar {
-                background: var(--imperial-gold); color: #020617; padding: 10px; text-align: center;
+                background: var(--brand-gold); color: #020617; padding: 10px; text-align: center;
                 font-size: 0.85rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
                 position: sticky; top: 0; z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             }
@@ -740,11 +669,14 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
     },
 
     renderUI() {
-        // Urgency Bar
+        // Urgency Bar (Universal Tuition Hub)
         const urgency = document.createElement('div');
         urgency.className = 'unnat-urgency-bar';
-        urgency.innerHTML = `🏆 #1 TUITION IN KURUKSHETRA | NEXT BATCH STARTS IN <span class="urgency-timer" id="urgencyTimer">04h 22m 11s</span>`;
-        document.body.prepend(urgency);
+        urgency.innerHTML = `🌍 <span id="liveCounter">12,482</span> STUDENTS OPTIMIZED GLOBALLY | <span id="fomoLocation">PIPLI</span> JUST JOINED | NEXT BATCH STARTS IN <span class="urgency-timer" id="urgencyTimer">04h 22m 11s</span>`;
+        if (document.body.firstChild) document.body.insertBefore(urgency, document.body.firstChild);
+        else document.body.appendChild(urgency);
+
+        this.startLivePulse();
 
         // Advisor Bubble
         const bubble = document.createElement('div');
@@ -769,30 +701,25 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
         panel.innerHTML = `
             <div class="counselor-header">
                 <div style="position: relative;">
-                    <div style="width: 45px; height: 45px; background: var(--imperial-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.2); overflow: hidden;">
+                    <div style="width: 45px; height: 45px; background: var(--brand-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255,255,255,0.2); overflow: hidden;">
                         <img src="unnat_ai_avatar.png" alt="Unnat AI" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #22c55e; border-radius: 50%; border: 2px solid #0f172a;"></div>
                 </div>
                 <div>
-                    <div style="font-weight: 900; font-size: 1.1rem; letter-spacing: 1px; color: var(--imperial-gold);">UNNAT AI TUTOR</div>
+                    <div style="font-weight: 900; font-size: 1.1rem; letter-spacing: 1px; color: var(--brand-gold);">UNNAT AI TUTOR</div>
                     <div style="font-size: 0.7rem; opacity: 0.8; color: #fff;">Always Online • Academic Expert</div>
                 </div>
             </div>
             <div class="counselor-body" id="counselorChat">
-                <div class="counselor-msg">Welcome to **Unnat Academic Intelligence**. I am your Digital Tutor from Unnat Tuition Center. How can I help you excel today?</div>
-                <div class="btn-group" id="quickOptions">
-                    <button class="btn-option" onclick="CouncilAgent.sendQuick('Solve a difficult Math problem')">🔢 Solve a specific Math problem</button>
-                    <button class="btn-option" onclick="CouncilAgent.sendQuick('Predict my Board Exam Marks')">📊 Predict my Board Exam Marks</button>
-                    <button class="btn-option" onclick="CouncilAgent.sendQuick('Why Unnat is #1 in Kurukshetra?')">👑 Why Unnat is #1 in Kurukshetra?</button>
-                </div>
+                <div class="counselor-msg">Welcome to **Unnat Academic Intelligence**. I am your Digital Tutor. How can I help you excel today?</div>
             </div>
             <div class="typing-indicator" id="typing">Unnat Genius is processing...</div>
             <div class="chat-input-area">
                 <input type="text" id="chatInput" placeholder="Ask anything to the #1 Tutor...">
                 <button class="send-btn" id="sendBtn"><i class="fas fa-paper-plane"></i></button>
             </div>
-`;
+        `;
         document.body.appendChild(panel);
 
         // FOMO Toast
@@ -800,8 +727,22 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
         toast.className = 'fomo-toast';
         toast.id = 'unnatFomo';
         toast.innerHTML = `<div style="width:35px; height:35px; background:#e0f2fe; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; color:#0369a1;">U</div>
-    <div style="font-size: 0.85rem;" id="fomoText">Activity...</div>`;
+            <div style="font-size: 0.85rem;" id="fomoText">Activity...</div>`;
         document.body.appendChild(toast);
+
+        this.initPersonalization();
+    },
+
+    async initPersonalization() {
+        const context = await this.getIPContext();
+        const chat = document.getElementById('counselorChat');
+        if (chat) {
+            const greeting = context.isLocal
+                ? `Hi! Welcome to the Unnat Tuition Command. Growing together in **${context.city}**? I'm your AI Tutor. Ask me anything!`
+                : `Greetings from the Unnat Tuition Center. We've optimized your intelligence node for **${context.city}, ${context.country}**. How can I assist your global training today?`;
+
+            chat.innerHTML = `<div class="counselor-msg">${greeting}</div>`;
+        }
     },
 
     startUrgencyProtocol() {
@@ -815,9 +756,27 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
         }, 1000);
     },
 
-    startCouncilPulse() {
+    startLivePulse() {
+        let count = 12482;
+        const locations = ["London", "New York", "Delhi", "Thanesar", "Sydney", "Dubai", "Pipli", "Berlin", "Toronto"];
+
+        setInterval(() => {
+            count += Math.floor(Math.random() * 3) + 1;
+            const live = document.getElementById('liveCounter');
+            const locText = document.getElementById('fomoLocation');
+            if (live) live.innerText = count.toLocaleString();
+            if (locText) {
+                const newLoc = locations[Math.floor(Math.random() * locations.length)];
+                locText.innerText = newLoc.toUpperCase();
+                locText.style.color = "#ef4444";
+                setTimeout(() => locText.style.color = "inherit", 1000);
+            }
+        }, 8000);
+    },
+
+    startCenterPulse() {
         const locations = this.config.neighborhoods;
-        const events = ["requested a Council declassification", "filed an Imperial Merit Case", "accessed the State Archive", "initiated an Academic Directive"];
+        const events = ["requested a Center case file", "filed an Tuition Merit Case", "accessed the State Archive", "initiated an Academic Directive"];
         setInterval(() => {
             const loc = locations[Math.floor(Math.random() * locations.length)];
             const event = events[Math.floor(Math.random() * events.length)];
@@ -845,18 +804,20 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
     },
 
     async askAI(question) {
-        if (!this.GEMINI_API_KEY) {
-            return "Hi! I'm ready to be your AI Tutor. To start, please paste your **FREE Gemini API Key** in `agent.js`.";
+        const keys = await this.getKeys();
+        if (!keys.gemini) {
+            return "Hi! I'm ready to be your AI Tutor. Unnat Intelligence v10 is initializing...";
         }
+
+        const context = await this.getIPContext();
 
         const tryModel = async (model, key) => {
             try {
-                // console.log(`Unnat AI: Attempting connection to ${model}...`); // Reduced logging
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ role: "user", parts: [{ text: `You are the Unnat AI Tutor. Help students with Math, English, Science. Keep answers concise. Question: ${question}` }] }]
+                        contents: [{ role: "user", parts: [{ text: `You are the Unnat Tuition AI Tutor. User Region: ${context.city}, ${context.country}. Goal: Revolutionary academic excellence. Help student with Math, Science, English, or Careers. Concise & Elite. Question: ${question}` }] }]
                     })
                 });
                 return { ok: response.ok, status: response.status, data: await response.json() };
@@ -865,32 +826,24 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
             }
         };
 
-        // Confirmed Available Models (Removed dead 1.5/Pro models)
-        const models = ["gemini-2.0-flash", "gemini-2.5-pro"];
+        const models = ["gemini-2.0-flash", "gemini-1.5-flash"];
         let result = null;
 
         for (const model of models) {
-            result = await tryModel(model, this.GEMINI_API_KEY);
-            if (result.ok) break; // Success!
+            result = await tryModel(model, keys.gemini);
+            if (!result.ok) result = await tryModel(model, keys.backup);
+            if (result.ok) break;
 
-            // If Rate Limited (429), stop immediately. Don't hammer other models.
             if (result.status === 429) {
-                return `**🧠 Brain Overheating!**\nToo many students are asking questions right now (Rate Limit Reached).\n\n**Please wait 1 minute and try again.** ⏳`;
+                return `**🧠 Brain Overheating!**\nHigh demand on Unnat Intelligence nodes. Please wait 1 minute. ⏳`;
             }
-
-            if (result.status === 400 || result.status === 403) break; // Key error
         }
 
         if (result && result.ok && result.data?.candidates?.[0]) {
             return result.data.candidates[0].content.parts[0].text;
         }
 
-        // Specific Error for Key Issues
-        if (result && (result.status === 400 || result.status === 403)) {
-            return `**API Key Issue:** Google blocked the request. Please check your API Key in agent.js.`;
-        }
-
-        return `**Connection Error (${result ? result.status : 'Unknown'}):** Internet or Google API is down.`;
+        return `**Connection Error (${result ? result.status : 'Unknown'}):** Unnat Core is offline.`;
     },
 
     async handleSend() {
@@ -905,9 +858,19 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
         if (typing) typing.style.display = 'block';
         chat.scrollTop = chat.scrollHeight;
 
-        // If user wants prediction
-        if (text.toLowerCase().includes('predict') || text.toLowerCase().includes('marks') || text.toLowerCase().includes('score')) {
-            await this.handlePredictor(chat);
+        // [VIRAL FLOW DETECTION]
+        if (text.toLowerCase().includes('career') || text.toLowerCase().includes('grade') || text.toLowerCase().includes('dream')) {
+            const answer = await this.askAI(`VIRAL PREDICTOR MODE: Student wants a Global Success Prediction. Career: ${text}. Be elite, give a % score. Emphasize that Unnat Tuition Center is the only academy that can guarantee this level of optimization. Mention 3 strategic growth steps.`);
+            if (typing) typing.style.display = 'none';
+
+            const shareText = encodeURIComponent(`🔥 MY GLOBAL SUCCESS SCORE IS IN!\n\nUnnat Intelligence v10 analyzed my profile and predicted high success probability.\n\nCheck yours now: https://unnattuitioncenter.github.io/`);
+            const shareLink = `<br><div style="margin-top:10px; padding:15px; background:linear-gradient(135deg, #fbbf24, #d97706); border-radius:10px; color:#020617;">
+                <p style="font-size:0.8rem; margin-bottom:10px; font-weight:900;">🏆 PROFILE OPTIMIZED! Share your Success Score to unlock the Advanced Merit PDF.</p>
+                <a href="https://wa.me/?text=${shareText}" target="_blank" style="background:#020617; color:white; padding:8px 15px; border-radius:5px; text-decoration:none; display:inline-block; font-weight:800; font-size:0.85rem;"><i class="fab fa-whatsapp"></i> Broadcast Success on WhatsApp</a>
+            </div>`;
+
+            chat.innerHTML += `<div class="counselor-msg">${answer}${shareLink}</div>`;
+            chat.scrollTop = chat.scrollHeight;
             return;
         }
 
@@ -920,11 +883,14 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
             responseLength: answer.length
         });
 
-        // Add Share Link ONLY if successful answer (no error)
+        // High-Conversion Sharing Logic (Viral Protocol)
         let shareLink = '';
         if (!answer.includes('Connection Error') && !answer.includes('API Key Issue')) {
-            const shareText = encodeURIComponent(`Solved via Unnat AI: "${text}" -> Solution: ${answer.substring(0, 50)}... Access Unnat Tuition Center: https://unnattuitioncenter.github.io/`);
-            shareLink = `<br><a href="https://wa.me/?text=${shareText}" target="_blank" class="share-link"><i class="fab fa-whatsapp"></i> Share solution with classmates</a>`;
+            const shareText = encodeURIComponent(`🚀 Unnat AI just solved this for me: "${text.substring(0, 30)}..."\n\nSolution: ${answer.substring(0, 100)}...\n\nGet your free AI solution at Unnat Tuition: https://unnattuitioncenter.github.io/`);
+            shareLink = `<br><div style="margin-top:10px; padding:10px; background:rgba(37, 211, 102, 0.1); border-radius:8px; border:1px border-radius:8px; border:1px solid #25d366;">
+                <p style="font-size:0.75rem; color:#22c55e; margin-bottom:5px; font-weight:800;">🔥 VIRAL BONUS: Share this solution to unlock Advanced Tuition Insights!</p>
+                <a href="https://wa.me/?text=${shareText}" target="_blank" class="share-link" style="background:#25d366; color:white; padding:5px 12px; border-radius:5px; text-decoration:none; display:inline-block; font-size:0.8rem;"><i class="fab fa-whatsapp"></i> Share with Classmates</a>
+            </div>`;
         }
 
         chat.innerHTML += `<div class="counselor-msg">${answer}${shareLink}</div>`;
@@ -937,7 +903,15 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
 
     async handlePredictor(chat) {
         if (document.getElementById('typing')) document.getElementById('typing').style.display = 'none';
-        chat.innerHTML += `<div class="counselor-msg">Imperial Council Protocol: Please provide your **last academic baseline percentage** (e.g., 75%). I will initiate a regional projection.</div>`;
+        chat.innerHTML += `<div class="counselor-msg">Tuition Center Protocol: Please provide your **last academic baseline percentage** (e.g., 75%). I will initiate a regional projection.</div>`;
+        chat.scrollTop = chat.scrollHeight;
+    },
+
+    async handleViralPredictor() {
+        const panel = document.getElementById('unnatPanel');
+        if (panel) panel.style.display = 'flex';
+        const chat = document.getElementById('counselorChat');
+        chat.innerHTML += `<div class="counselor-msg" style="border: 2px solid var(--brand-gold);">🚀 **VIRAL SUCCESS PREDICTOR INITIALIZED**\n\nTell me your **Dream Career** and **Current Grade**. I will calculate your **Global Success Probability** using Unnat Intelligence v10.</div>`;
         chat.scrollTop = chat.scrollHeight;
     },
 
@@ -959,7 +933,7 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
                 <p style="color: #f1f5f9; font-weight: 900; letter-spacing: 2px;">POTENTIAL BOARD SCORE</p>
                 <div style="height: 1px; background: rgba(197, 160, 89, 0.2); margin: 20px 0;"></div>
                 <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.6;">Our analysis indicates a <strong>15% increase</strong> in performance potential with Unnat's specialized academic methodology.</p>
-                <a href="https://wa.me/${this.config.whatsapp}?text=My%20Unnat%20Score%20Projection%20is%20${prediction}%%20-%20Requesting%20Enrollment." class="btn-imperial" style="display: block; margin-top: 25px; padding: 12px !important;">Join New Batch #2026</a>
+                <a href="https://wa.me/${this.config.whatsapp}?text=My%20Unnat%20Score%20Projection%20is%20${prediction}%%20-%20Requesting%20Enrollment." class="btn-Tuition" style="display: block; margin-top: 25px; padding: 12px !important;">Join New Batch #2026</a>
             </div>
         `;
 
@@ -1006,85 +980,26 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
     },
 
     async SocialEngine(force = false) {
-        if (!this.GEMINI_API_KEY) return;
-
-        // [CACHE CHECK] 24 Hour Expiry (Daily Content)
+        const context = await this.getIPContext();
         const CACHE_KEY = 'unnat_social_cache';
         const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
         const now = Date.now();
+
         if (!force && cached.timestamp && (now - cached.timestamp < 1000 * 60 * 60 * 24)) {
             console.log("Social Engine: Using Cached Daily Content");
-            return; // UI reads from localstorage directly
+            return;
         }
 
-        console.log("Social Engine: Generating Viral Content...");
-
-        const topics = [
-            "Exam Motivation", "Study Hack", "Math Trick", "Science Fact", "Unnat Success Story",
-            "Parenting Tip", "Career Advice", "Haryana GK Fact"
-        ];
-        const topic = topics[Math.floor(Math.random() * topics.length)];
-
-        const prompt = `You are the Social Media Manager for Unnat Tuition Center.
-        Topic: ${topic}
-        Generate 3 distinct pieces of content VALID JSON format strictly:
-        {
-            "insta": { "caption": "(Emoji rich caption with CTA)", "hashtags": "#Unnat #Kurukshetra...", "image_prompt": "Describe image to search" },
-            "yt": { "script": "Hook: ... Body: ... CTA: Join Unnat." },
-            "wa": { "text": "Short punchy status update 🚀" }
-        }`;
-
-        // [VISUAL FEEDBACK]
-        this.showToast('🤖 Social Director: Generating Viral Content...');
-
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${this.GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{ role: "user", parts: [{ text: prompt }] }],
-                generationConfig: { response_mime_type: "application/json" }
-            })
-        });
-
-        const data = await response.json();
-        let rawText = data.candidates[0].content.parts[0].text;
-        // Clean Markdown if present
-        rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-
-        const payload = JSON.parse(rawText);
-
-        // Fetch Image for Insta
-        let imgUrl = 'https://images.pexels.com/photos/301920/pexels-photo-301920.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'; // Default Fallback
-        if (this.PEXELS_API_KEY) {
-            try {
-                const imgRes = await fetch(`https://api.pexels.com/v1/search?query=${topic}&per_page=1`, {
-                    headers: { 'Authorization': this.PEXELS_API_KEY }
-                });
-                const imgData = await imgRes.json();
-                if (imgData.photos && imgData.photos[0]) imgUrl = imgData.photos[0].src.large;
-            } catch (e) { console.warn('Image Fetch Failed', e); }
+        try {
+            const payload = await UnnatSovereignEngine.synthesize('SOCIAL', context);
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: now, data: payload }));
+            this.showToast('✅ Social Strategy Synchronized!');
+            this._logToAdmin('SOCIAL', `Content Ready for ${context.city}`);
+            this.triggerWebhook(payload);
+        } catch (e) {
+            console.error("Social Engine Failed:", e);
         }
-        payload.insta.image = imgUrl;
-
-        // Save to Cache
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: payload }));
-
-        // [VISUAL FEEDBACK]Success make it persistent
-        localStorage.setItem('unnat_social_content', JSON.stringify({ data: payload })); // Backup key
-        this.showToast('✅ Social Content Ready! Check Admin Panel.');
-
-        // [ADMIN TELEMETRY]
-        this._logToAdmin('SOCIAL', 'Daily Content Generated', { topic: topic });
-
-        // [WEBHOOK AUTOMATION]
-        this.triggerWebhook(payload);
-
-    } catch(e) {
-        console.error("Social Engine Failed:", e);
-        this.showToast('❌ Social Engine Error. Check Console.');
-        this._logToAdmin('ERROR', 'Social Gen Failed', { error: e.message });
-    }
-},
+    },
 
     showToast(msg) {
         const t = document.createElement('div');
@@ -1094,70 +1009,70 @@ Response must be VALID JSON: {"content": "HTML content", "metaDescription": "150
         setTimeout(() => t.remove(), 5000);
     },
 
-        async triggerWebhook(payload) {
-    const webhook = localStorage.getItem('unnat_webhook_url');
-    if (!webhook) return;
+    async triggerWebhook(payload) {
+        const webhook = localStorage.getItem('unnat_webhook_url');
+        if (!webhook) return;
 
-    console.log("🚀 Triggering Auto-Post Webhook...");
-    try {
-        await fetch(webhook, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        this._logToAdmin('SOCIAL', 'Webhook Triggered (Auto-Post Success)');
-    } catch (e) {
-        console.error("Webhook Failed:", e);
-        this._logToAdmin('SOCIAL', 'Webhook Failed', { error: e.message });
+        console.log("🚀 Triggering Auto-Post Webhook...");
+        try {
+            await fetch(webhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            this._logToAdmin('SOCIAL', 'Webhook Triggered (Auto-Post Success)');
+        } catch (e) {
+            console.error("Webhook Failed:", e);
+            this._logToAdmin('SOCIAL', 'Webhook Failed', { error: e.message });
+        }
+    },
+
+    // [ADMIN TELEMETRY] Core Logger
+    _logToAdmin(type, message, data = {}) {
+        try {
+            const logEntry = {
+                timestamp: new Date().toISOString(),
+                type: type,
+                message: message,
+                data: data,
+                id: Date.now() + Math.random().toString(36).substr(2, 9)
+            };
+
+            // Get existing logs
+            let logs = JSON.parse(localStorage.getItem('unnat_agent_logs') || '[]');
+
+            // Add new log to top
+            logs.unshift(logEntry);
+
+            // Keep only last 100 logs
+            if (logs.length > 100) logs = logs.slice(0, 100);
+
+            // Save back
+            localStorage.setItem('unnat_agent_logs', JSON.stringify(logs));
+
+            // Also update stats for dashboard charts
+            this._updateAdminStats(type);
+
+        } catch (e) {
+            console.error('Telemetry Log Failed:', e);
+        }
+    },
+
+    _updateAdminStats(type) {
+        try {
+            let stats = JSON.parse(localStorage.getItem('unnat_stats') || '{"visits":0, "blogs":0, "chats":0, "predictions":0}');
+
+            if (type === 'BLOG') stats.blogs++;
+            if (type === 'CHAT') stats.chats++;
+            if (type === 'PREDICT') stats.predictions++;
+            if (type === 'SYSTEM') stats.visits++; // Counting init as a visit for now
+
+            localStorage.setItem('unnat_stats', JSON.stringify(stats));
+        } catch (e) { }
     }
-},
-
-// [ADMIN TELEMETRY] Core Logger
-_logToAdmin(type, message, data = {}) {
-    try {
-        const logEntry = {
-            timestamp: new Date().toISOString(),
-            type: type,
-            message: message,
-            data: data,
-            id: Date.now() + Math.random().toString(36).substr(2, 9)
-        };
-
-        // Get existing logs
-        let logs = JSON.parse(localStorage.getItem('unnat_agent_logs') || '[]');
-
-        // Add new log to top
-        logs.unshift(logEntry);
-
-        // Keep only last 100 logs
-        if (logs.length > 100) logs = logs.slice(0, 100);
-
-        // Save back
-        localStorage.setItem('unnat_agent_logs', JSON.stringify(logs));
-
-        // Also update stats for dashboard charts
-        this._updateAdminStats(type);
-
-    } catch (e) {
-        console.error('Telemetry Log Failed:', e);
-    }
-},
-
-_updateAdminStats(type) {
-    try {
-        let stats = JSON.parse(localStorage.getItem('unnat_stats') || '{"visits":0, "blogs":0, "chats":0, "predictions":0}');
-
-        if (type === 'BLOG') stats.blogs++;
-        if (type === 'CHAT') stats.chats++;
-        if (type === 'PREDICT') stats.predictions++;
-        if (type === 'SYSTEM') stats.visits++; // Counting init as a visit for now
-
-        localStorage.setItem('unnat_stats', JSON.stringify(stats));
-    } catch (e) { }
-}
 };
 
-// Initialize the Imperial Council
+// Initialize the Tuition Center
 window.addEventListener('scroll', () => {
     const nav = document.querySelector('.navbar');
     if (nav) {
@@ -1166,12 +1081,126 @@ window.addEventListener('scroll', () => {
     }
 });
 
-CouncilAgent.init();
+/**
+ * Tuition Media Engine v1.1
+ * Purpose: Dynamically render cinematic cards for AI nodes
+ * Features: Auto-playing Video Backgrounds, Glassmorphism, Premium Hover Effects
+ */
+const TuitionMediaEngine = {
+    async init() {
+        const grid = document.getElementById('tuition-dynamic-grid');
+        if (!grid) return;
+
+        // Priority 1: Check for global variable (CORS-safe for local files)
+        if (Array.isArray(window.tuition_catalog) && window.tuition_catalog.length > 0) {
+            console.log('👑 Tuition Intelligence: Loading from global catalog sequence...');
+            this.render(grid, window.tuition_catalog);
+            return;
+        }
+
+        // Priority 2: Attempt Fetch (for server-hosted environments)
+        try {
+            const response = await fetch('tuition_catalog.json');
+            if (!response.ok) throw new Error('Catalog synchronization in progress...');
+            const catalog = await response.json();
+            this.render(grid, catalog);
+        } catch (e) {
+            console.warn('👑 Tuition Intelligence: Syncing Node Network...', e.message);
+            // Retry in 5s if not found
+            setTimeout(() => this.init(), 5000);
+        }
+    },
+
+    render(container, catalog) {
+        container.innerHTML = '';
+        // Only show top 12 in the main grid for high-impact
+        catalog.slice(0, 12).forEach(item => {
+            const card = document.createElement('a');
+            card.href = item.link;
+            card.className = 'cinematic-card';
+            card.style.cssText = `
+                position: relative;
+                height: 400px;
+                border-radius: 28px;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                padding: 35px;
+                text-decoration: none;
+                transition: transform 0.8s cubic-bezier(0.2, 1, 0.2, 1), box-shadow 0.8s, border-color 0.8s;
+                border: 2px solid rgba(197, 160, 89, 0.1);
+                background: #020617;
+                box-shadow: 0 15px 45px rgba(0,0,0,0.7);
+            `;
+
+            card.style.cssText = `
+                display: block;
+                background: #020617;
+                border-radius: 28px;
+                overflow: hidden;
+                text-decoration: none;
+                transition: transform 0.6s cubic-bezier(0.2, 1, 0.2, 1), box-shadow 0.6s, border-color 0.6s;
+                border: 2px solid rgba(197, 160, 89, 0.1);
+                box-shadow: 0 15px 45px rgba(0,0,0,0.4);
+            `;
+
+            card.innerHTML = `
+                <div class="card-media" style="position: relative; height: 240px; overflow: hidden; background: #000;">
+                    <!-- Base Global Image (Visible immediately) -->
+                    <img src="${item.image}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover; opacity: 1; transition: 1s cubic-bezier(0.2, 1, 0.2, 1);">
+                    
+                    ${item.video ? `
+                        <video autoplay muted loop playsinline preload="auto" poster="${item.image}" style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; z-index: 2; opacity: 0.8; transition: 1s;">
+                            <source src="${item.video}" type="video/mp4">
+                        </video>
+                    ` : ''}
+                    
+                    <div style="position: absolute; top: 20px; left: 20px; z-index: 10; background: var(--brand-gold); color: #000; padding: 5px 15px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;">ELITE DIRECTIVE</div>
+                </div>
+                
+                <div class="card-content" style="padding: 30px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%);">
+                    <h4 style="color: #fff; margin-bottom: 12px; font-size: 1.5rem; letter-spacing: -0.5px; font-family: 'Outfit', sans-serif; line-height: 1.1; transition: 0.3s;">${item.title}</h4>
+                    <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px; font-weight: 400;">${item.desc}</p>
+                    
+                    <div style="color: var(--brand-gold); font-weight: 900; font-size: 0.85rem; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; transition: 0.3s;" class="intel-link">
+                        ACCESS INTELLIGENCE <span style="font-size: 1.4rem; transition: 0.3s;">→</span>
+                    </div>
+                </div>
+
+                <style>
+                    .cinematic-card:hover {
+                        transform: translateY(-12px);
+                        box-shadow: 0 30px 60px rgba(197, 160, 89, 0.15);
+                        border-color: rgba(197, 160, 89, 0.8);
+                    }
+                    .cinematic-card:hover .intel-link {
+                        gap: 15px;
+                        filter: brightness(1.2);
+                    }
+                    .cinematic-card:hover img {
+                        opacity: 0.7;
+                        transform: scale(1.1);
+                    }
+                    .cinematic-card:hover video {
+                        opacity: 1 !important;
+                        filter: brightness(1.1) contrast(1.1);
+                    }
+                </style>
+            `;
+
+            container.appendChild(card);
+        });
+    }
+};
+
+TuitionMediaEngine.init();
+UnnatAgent.init();
 
 // Global helper to download generated blog posts
 window.downloadBlog = function () {
     if (!window.generatedBlog) {
-        alert('No blog post generated yet! Run CouncilAgent.BlogEngine() first.');
+        alert('No blog post generated yet! Run UnnatAgent.BlogEngine() first.');
         return;
     }
 
@@ -1191,5 +1220,38 @@ window.downloadBlog = function () {
 // Manual blog generation trigger
 window.generateBlog = function () {
     console.log('🚀 Manually triggering Blog Engine...');
-    CouncilAgent.BlogEngine();
+    UnnatAgent.BlogEngine();
 };
+
+// [SEO GRID] Injection logic for Tuition Nodes
+window.addEventListener('load', () => {
+    const footer = document.querySelector('footer');
+    if (footer) {
+        const grid = document.createElement('div');
+        grid.style.cssText = `background: #020617; padding: 50px 0; border-top: 1px solid rgba(197, 160, 89, 0.1);`;
+        grid.innerHTML = `
+            <div class="container">
+                <h4 style="color: var(--brand-gold); margin-bottom: 20px; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;">Global Intelligence Network</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;" id="seoGrid">
+                    <a href="best-tuition-in-kurukshetra-for-class-10.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">Class 10 Tuition</a>
+                    <a href="how-to-crack-cbse-board-exams-2026.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">CBSE 2026 Guide</a>
+                    <a href="unnat-tuition-center-fees-and-results.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">Unnat Fees & Results</a>
+                    <a href="best-spoken-english-course-in-kurukshetra-university.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">Spoken English KUK</a>
+                    <a href="top-coaching-for-hssc-exams-haryana.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">HSSC Coaching</a>
+                    <a href="class-12-physics-coaching-near-thansesar.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">Class 12 Physics</a>
+                    <a href="maths-coaching-for-class-9-haryana-board.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">Class 9 Maths</a>
+                    <a href="competitive-exam-preparation-center-in-kurukshetra.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">Govt Job Exams</a>
+                    <a href="unnat-tuition-center-kkr-reviews.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">Student Reviews</a>
+                    <a href="ai-powered-learning-benefits-for-students.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">AI Learning</a>
+                    <a href="ielts-preparation-kurukshetra-unnat.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">IELTS Prep</a>
+                    <a href="app-development-kurukshetra.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">App Dev KKR</a>
+                    <a href="seo-services-kurukshetra.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">SEO Services</a>
+                    <a href="spoken-english-60-days-course-curriculum.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">Spoken English 60D</a>
+                    <a href="unnat-intelligence-career-predictor-review.html" style="color: #64748b; font-size: 0.7rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; transition: 0.3s;">Career Predictor</a>
+                </div>
+                <p style="color: #334155; font-size: 0.6rem; margin-top: 30px;">Network v10.2 • Tuition Node Synchronization Active</p>
+            </div>
+        `;
+        footer.parentElement.insertBefore(grid, footer);
+    }
+});

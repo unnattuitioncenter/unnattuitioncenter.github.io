@@ -1,0 +1,22 @@
+{
+  "name": "Unnat Tuition Center",
+  "short_name": "Unnat Center",
+  "description": "Revolutionary Global Education Strategy & Intelligence.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#c5a059",
+  "icons": [
+    {
+      "src": "unnat_ai_avatar.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "unnat_ai_avatar.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "portrait"
+}

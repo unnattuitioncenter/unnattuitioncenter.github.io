@@ -1,10 +1,10 @@
-/* Unnat 8.0 - Institutional Supremacy (Imperial) */
+/* Unnat 8.0 - Institutional Supremacy (TUITION) */
 :root {
-    --imperial-navy: #0f172a;
-    --imperial-gold: #c5a059;
-    --imperial-gold-glow: rgba(197, 160, 89, 0.4);
-    --imperial-marble: #f1f5f9;
-    --imperial-accent: #1e293b;
+    --brand-navy: #0f172a;
+    --brand-gold: #c5a059;
+    --brand-gold-glow: rgba(197, 160, 89, 0.4);
+    --brand-marble: #f1f5f9;
+    --brand-accent: #1e293b;
     --phantom-black: #020617;
 }
 
@@ -15,7 +15,7 @@ body {
     font-family: 'Outfit', sans-serif;
 }
 
-/* Imperial Glassmorphism */
+/* TUITION Glassmorphism */
 .glass-panel {
     background: rgba(15, 23, 42, 0.9);
     backdrop-filter: blur(40px) saturate(180%);
@@ -25,15 +25,15 @@ body {
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
 }
 
-/* UNNAT 9.0: THE IMPERIAL COUNCIL DESIGN SYSTEM */
+/* UNNAT 9.0: THE Tuition Center DESIGN SYSTEM */
 :root {
-    --imperial-gold: #c5a059;
-    --imperial-gold-bright: #e3c18d;
-    --imperial-navy: #0f172a;
-    --imperial-black: #020617;
-    --imperial-gray: #1e293b;
+    --brand-gold: #c5a059;
+    --brand-gold-bright: #e3c18d;
+    --brand-navy: #0f172a;
+    --brand-black: #020617;
+    --brand-gray: #1e293b;
     --marble-text: linear-gradient(135deg, #c5a059, #e3c18d, #c5a059);
-    --imperial-gold-glow: rgba(197, 160, 89, 0.4);
+    --brand-gold-glow: rgba(197, 160, 89, 0.4);
 }
 
 /* Global Reset */
@@ -46,14 +46,14 @@ body {
 /* Global Institutional Body */
 body,
 html,
-div:not(.official-badge):not(.btn-imperial),
+div:not(.official-badge):not(.btn-tuition),
 section,
 header,
 nav,
 footer,
 aside,
 main {
-    background-color: var(--imperial-black) !important;
+    background-color: var(--brand-black) !important;
     color: #f1f5f9 !important;
 }
 
@@ -98,15 +98,15 @@ html {
 .inst-card:hover,
 .feature-card:hover,
 .course-card:hover {
-    border-color: var(--imperial-gold) !important;
+    border-color: var(--brand-gold) !important;
     transform: translateY(-5px);
-    box-shadow: 0 20px 60px var(--imperial-gold-glow);
+    box-shadow: 0 20px 60px var(--brand-gold-glow);
 }
 
 /* Royal Divider */
 .royal-divider {
     height: 1px;
-    background: linear-gradient(to right, transparent, var(--imperial-gold), transparent);
+    background: linear-gradient(to right, transparent, var(--brand-gold), transparent);
     margin: 60px 0;
     position: relative;
 }
@@ -117,20 +117,20 @@ html {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: var(--imperial-black);
+    background: var(--brand-black);
     padding: 0 20px;
-    color: var(--imperial-gold);
+    color: var(--brand-gold);
     font-size: 1.2rem;
 }
 
-/* Global Button: Imperial Council */
-.btn-imperial,
+/* Global Button: Tuition Center */
+.btn-tuition,
 .btn-primary,
 .btn-nav,
 .btn-monopoly,
 .btn-text {
-    background: var(--imperial-gold) !important;
-    color: var(--imperial-black) !important;
+    background: var(--brand-gold) !important;
+    color: var(--brand-black) !important;
     border: none !important;
     padding: 15px 35px !important;
     font-weight: 900 !important;
@@ -145,18 +145,18 @@ html {
     justify-content: center;
 }
 
-.btn-imperial:hover,
+.btn-tuition:hover,
 .btn-primary:hover {
-    background: var(--imperial-gold-bright) !important;
-    box-shadow: 0 0 30px var(--imperial-gold-glow);
+    background: var(--brand-gold-bright) !important;
+    box-shadow: 0 0 30px var(--brand-gold-glow);
     transform: scale(1.02);
 }
 
 /* State Authority Bar */
 .state-authority-bar {
-    background: var(--imperial-navy);
-    border-bottom: 2px solid var(--imperial-gold);
-    color: var(--imperial-gold);
+    background: var(--brand-navy);
+    border-bottom: 2px solid var(--brand-gold);
+    color: var(--brand-gold);
     padding: 12px;
     text-align: center;
     font-weight: 900;
@@ -168,8 +168,8 @@ html {
 /* Official Badges */
 .official-badge {
     background: rgba(197, 160, 89, 0.1);
-    color: var(--imperial-gold);
-    border: 1px solid var(--imperial-gold);
+    color: var(--brand-gold);
+    border: 1px solid var(--brand-gold);
     padding: 8px 20px;
     font-size: 0.7rem;
     font-weight: 900;
@@ -195,13 +195,13 @@ hr {
 
 /* Testimonial Override */
 .testimonial-card {
-    background: linear-gradient(135deg, var(--imperial-navy), var(--imperial-black)) !important;
-    border-left: 5px solid var(--imperial-gold) !important;
+    background: linear-gradient(135deg, var(--brand-navy), var(--brand-black)) !important;
+    border-left: 5px solid var(--brand-gold) !important;
 }
 
 /* App Promo Gradient override */
 .app-promo {
-    background: radial-gradient(circle at top right, var(--imperial-navy), var(--imperial-black)) !important;
-    border-top: 1px solid var(--imperial-gold);
-    border-bottom: 1px solid var(--imperial-gold);
+    background: radial-gradient(circle at top right, var(--brand-navy), var(--brand-black)) !important;
+    border-top: 1px solid var(--brand-gold);
+    border-bottom: 1px solid var(--brand-gold);
 }

@@ -1,9 +1,9 @@
-/* Admin Dashboard - Imperial Theme */
+/* Admin Dashboard - TUITION Theme */
 :root {
-    --imperial-gold: #c5a059;
-    --imperial-black: #020617;
-    --imperial-navy: #0f172a;
-    --imperial-panel: #1e293b;
+    --brand-gold: #c5a059;
+    --brand-black: #020617;
+    --brand-navy: #0f172a;
+    --brand-panel: #1e293b;
     --text-primary: #f1f5f9;
     --text-secondary: #94a3b8;
     --success: #22c55e;
@@ -19,7 +19,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--imperial-black);
+    background-color: var(--brand-black);
     color: var(--text-primary);
     display: flex;
     height: 100vh;
@@ -29,7 +29,7 @@ body {
 /* Sidebar */
 .sidebar {
     width: 260px;
-    background-color: var(--imperial-navy);
+    background-color: var(--brand-navy);
     border-right: 1px solid rgba(197, 160, 89, 0.2);
     display: flex;
     flex-direction: column;
@@ -39,7 +39,7 @@ body {
 .logo {
     font-size: 1.5rem;
     font-weight: 900;
-    color: var(--imperial-gold);
+    color: var(--brand-gold);
     margin-bottom: 40px;
     display: flex;
     align-items: center;
@@ -60,7 +60,7 @@ body {
 
 .nav-item:hover, .nav-item.active {
     background-color: rgba(197, 160, 89, 0.1);
-    color: var(--imperial-gold);
+    color: var(--brand-gold);
     font-weight: 600;
 }
 
@@ -126,7 +126,7 @@ body {
 }
 
 .card {
-    background: var(--imperial-panel);
+    background: var(--brand-panel);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     padding: 25px;
@@ -141,7 +141,7 @@ body {
     left: 0;
     width: 100%;
     height: 4px;
-    background: var(--imperial-gold);
+    background: var(--brand-gold);
     opacity: 0.5;
 }
 
@@ -167,7 +167,7 @@ body {
 
 /* Live Feed */
 .feed-container {
-    background: var(--imperial-panel);
+    background: var(--brand-panel);
     border-radius: 12px;
     padding: 25px;
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -206,7 +206,7 @@ body {
 }
 
 .type-SYSTEM { background: rgba(255, 255, 255, 0.1); color: var(--text-primary); }
-.type-COUNCIL { background: rgba(197, 160, 89, 0.1); color: var(--imperial-gold); }
+.type-CENTER { background: rgba(197, 160, 89, 0.1); color: var(--brand-gold); }
 .type-BLOG { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
 .type-CHAT { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
 .type-PREDICT { background: rgba(236, 72, 153, 0.1); color: #f472b6; }
@@ -249,10 +249,10 @@ body {
 }
 
 .login-box {
-    background: var(--imperial-navy);
+    background: var(--brand-navy);
     padding: 40px;
     border-radius: 12px;
-    border: 1px solid var(--imperial-gold);
+    border: 1px solid var(--brand-gold);
     text-align: center;
     width: 100%;
     max-width: 400px;
@@ -262,7 +262,7 @@ body {
 .login-input {
     width: 100%;
     padding: 15px;
-    background: var(--imperial-black);
+    background: var(--brand-black);
     border: 1px solid rgba(255,255,255,0.1);
     color: white;
     margin: 20px 0;
@@ -273,8 +273,8 @@ body {
 .login-btn {
     width: 100%;
     padding: 15px;
-    background: var(--imperial-gold);
-    color: var(--imperial-black);
+    background: var(--brand-gold);
+    color: var(--brand-black);
     border: none;
     font-weight: 800;
     cursor: pointer;

@@ -24,7 +24,8 @@ const AdminApp = {
 
     login() {
         const pass = document.getElementById('adminPass').value;
-        if (pass === 'admin123') { // Simple client-side check for demo
+        const master = localStorage.getItem('unnat_admin_pass') || 'admin123';
+        if (pass === master) {
             sessionStorage.setItem('unnat_admin_session', 'active');
             this.isAuthenticated = true;
             document.getElementById('loginOverlay').style.display = 'none';
@@ -88,6 +89,8 @@ const AdminApp = {
         setInterval(() => {
             this.fetchData();
         }, 3000);
+
+        this.initTokens();
     },
 
     fetchData() {
@@ -318,6 +321,36 @@ const AdminApp = {
 
     renderDashboard() {
         this.fetchData();
+    },
+
+    saveKeys() {
+        const keys = {
+            gemini: document.getElementById('key-gemini').value,
+            backup: document.getElementById('key-backup').value,
+            pexels: document.getElementById('key-pexels').value
+        };
+        localStorage.setItem('unnat_keys', JSON.stringify(keys));
+        alert('Tuition Keys Synchronized. Global Nodes Updated.');
+    },
+
+    initTokens() {
+        const keys = JSON.parse(localStorage.getItem('unnat_keys') || '{}');
+        const g = document.getElementById('key-gemini');
+        const b = document.getElementById('key-backup');
+        const p = document.getElementById('key-pexels');
+
+        if (g) g.value = keys.gemini || '';
+        if (b) b.value = keys.backup || '';
+        if (p) p.value = keys.pexels || '';
+    },
+
+    updateAdminPass() {
+        const newPass = document.getElementById('newAdminPass').value;
+        if (!newPass) return alert('Enter a valid security key.');
+        if (confirm('Rotate Master Token? You will be logged out.')) {
+            localStorage.setItem('unnat_admin_pass', newPass);
+            this.logout();
+        }
     }
 };
 

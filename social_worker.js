@@ -14,11 +14,20 @@ async function run() {
         process.exit(1);
     }
 
-    // 1. Generate Content
-    console.log("Testing Generation...");
-    const topic = "Study Motivation";
-    const prompt = `You are a Social Media Manager. Topic: ${topic}. 
-    Generate JSON: { "insta": { "caption": "...", "image_prompt": "..." } }`;
+    // 1. Generate Content (V10 Sovereign Prompt)
+    console.log("Synthesizing Sovereign Tuition Content...");
+    const topic = "Unnat Dominance & Academic Mastery";
+    const prompt = `You are the Senior Brand Sovereign for the Unnat Tuition Center.
+    Strategy: Multi-Channel Market Domination.
+    Topic: ${topic}
+    Goal: Viral authority on elite education and why Unnat is the premier monopoly in Haryana.
+    Generate VALID JSON for 4 channels: 
+    { 
+      "insta": { "caption": "...", "image_prompt": "..." }, 
+      "wa": { "text": "..." },
+      "linkedin": { "post": "..." },
+      "twitter": { "tweet": "..." }
+    }`;
 
     try {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`, {
@@ -30,12 +39,12 @@ async function run() {
         let raw = data.candidates[0].content.parts[0].text;
         raw = raw.replace(/```json/g, '').replace(/```/g, '').trim();
         const payload = JSON.parse(raw);
-        console.log("✅ Content Generated:", payload.insta.caption.substring(0, 50) + "...");
+        console.log("✅ Tuition Content Synthesized.");
 
         // 2. Fetch Image
         let imageUrl = 'https://images.pexels.com/photos/301920/pexels-photo-301920.jpeg';
         if (PEXELS_KEY) {
-            const imgRes = await fetch(`https://api.pexels.com/v1/search?query=education&per_page=1`, {
+            const imgRes = await fetch(`https://api.pexels.com/v1/search?query=elite+education+architecture+luxury&per_page=1`, {
                 headers: { 'Authorization': PEXELS_KEY }
             });
             const imgData = await imgRes.json();
