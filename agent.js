@@ -39,9 +39,31 @@ const UnnatSovereignEngine = {
             });
         };
 
+        const tryGroqFallback = async (apiKey) => {
+            console.log("📡 Sovereign Engine: Engaging Groq High-Speed Failover...");
+            return await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile",
+                    messages: [{ role: "user", content: prompt }],
+                    response_format: { type: "json_object" }
+                })
+            });
+        };
+
         try {
             let res = await tryWithKey(keys.gemini);
             if (!res.ok) res = await tryWithKey(keys.backup);
+
+            if (!res.ok && keys.groq) {
+                res = await tryGroqFallback(keys.groq);
+                const data = await res.json();
+                return JSON.parse(data.choices[0].message.content.replace(/```json/g, '').replace(/```/g, '').trim());
+            }
 
             const data = await res.json();
             let raw = data.candidates[0].content.parts[0].text;
@@ -59,7 +81,8 @@ const UnnatAgent = {
     DEFAULTS: {
         GEMINI: "",
         BACKUP: "",
-        PEXELS: ""
+        PEXELS: "",
+        GROQ: ""
     },
 
     config: {
@@ -76,7 +99,8 @@ const UnnatAgent = {
         return {
             gemini: keys.gemini || this.DEFAULTS.GEMINI,
             backup: keys.backup || this.DEFAULTS.BACKUP,
-            pexels: keys.pexels || this.DEFAULTS.PEXELS
+            pexels: keys.pexels || this.DEFAULTS.PEXELS,
+            groq: keys.groq || this.DEFAULTS.GROQ
         };
     },
 
@@ -805,45 +829,28 @@ const UnnatAgent = {
 
     async askAI(question) {
         const keys = await this.getKeys();
-        if (!keys.gemini) {
-            return "Hi! I'm ready to be your AI Tutor. Unnat Intelligence v10 is initializing...";
+        if (!keys.gemini && !keys.backup && !keys.groq) {
+            return "Hi! I'm ready to be your AI Tutor. Please configure your **TUITION Security Keys** in the Admin Command Center to activate full pedagogical synthesis.";
         }
 
         const context = await this.getIPContext();
+        const customPrompt = `
+            Role: Unnat Tuition AI Tutor & Academic Sovereign.
+            Context: Client in ${context.city}, ${context.country}.
+            Goal: Deliver elite, concise, and pedagogical assistance.
+            User Question: ${question}
+            Mission: Help student with Math, Science, English, or Careers. Concise & Elite.
+            Formatting: Response must be a valid JSON object with a single field "response".
+        `;
 
-        const tryModel = async (model, key) => {
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ role: "user", parts: [{ text: `You are the Unnat Tuition AI Tutor. User Region: ${context.city}, ${context.country}. Goal: Revolutionary academic excellence. Help student with Math, Science, English, or Careers. Concise & Elite. Question: ${question}` }] }]
-                    })
-                });
-                return { ok: response.ok, status: response.status, data: await response.json() };
-            } catch (e) {
-                return { ok: false, status: 500, error: e };
-            }
-        };
-
-        const models = ["gemini-2.0-flash", "gemini-1.5-flash"];
-        let result = null;
-
-        for (const model of models) {
-            result = await tryModel(model, keys.gemini);
-            if (!result.ok) result = await tryModel(model, keys.backup);
-            if (result.ok) break;
-
-            if (result.status === 429) {
-                return `**🧠 Brain Overheating!**\nHigh demand on Unnat Intelligence nodes. Please wait 1 minute. ⏳`;
-            }
+        try {
+            const data = await UnnatSovereignEngine.synthesize('CHAT', context, customPrompt);
+            return data.response || "Synthesis successful, but directive was unclear. Please re-state your academic query.";
+        } catch (e) {
+            console.error("Counselor Synthesis Failure:", e);
+            if (e.message.includes('429')) return "**🧠 Brain Overheating!**\nHigh demand on Unnat Intelligence nodes. Please wait 1 minute. ⏳";
+            return `**Connection Error:** Unnat Core is offline. Please verify your keys in the Command Center.`;
         }
-
-        if (result && result.ok && result.data?.candidates?.[0]) {
-            return result.data.candidates[0].content.parts[0].text;
-        }
-
-        return `**Connection Error (${result ? result.status : 'Unknown'}):** Unnat Core is offline.`;
     },
 
     async handleSend() {

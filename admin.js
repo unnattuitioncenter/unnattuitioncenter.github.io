@@ -327,7 +327,8 @@ const AdminApp = {
         const keys = {
             gemini: document.getElementById('key-gemini').value,
             backup: document.getElementById('key-backup').value,
-            pexels: document.getElementById('key-pexels').value
+            pexels: document.getElementById('key-pexels').value,
+            groq: document.getElementById('key-groq').value
         };
         localStorage.setItem('unnat_keys', JSON.stringify(keys));
         alert('Tuition Keys Synchronized. Global Nodes Updated.');
@@ -338,10 +339,12 @@ const AdminApp = {
         const g = document.getElementById('key-gemini');
         const b = document.getElementById('key-backup');
         const p = document.getElementById('key-pexels');
+        const gr = document.getElementById('key-groq');
 
         if (g) g.value = keys.gemini || '';
         if (b) b.value = keys.backup || '';
         if (p) p.value = keys.pexels || '';
+        if (gr) gr.value = keys.groq || '';
     },
 
     updateAdminPass() {
